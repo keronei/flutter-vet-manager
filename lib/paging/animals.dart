@@ -5,16 +5,40 @@
 import 'package:flutter/material.dart';
 import '../animal_manager.dart';
 
-class LandingPage extends StatelessWidget {
+
+class AnimalsPage extends StatelessWidget {
+
+  final List<Map<String, String> > animals;
+
+  final Function addAnimal;
+  final Function removeAnimal;
+
+  AnimalsPage(this.animals, this.addAnimal, this.removeAnimal);
   @override
   Widget build(BuildContext context) {
+    return  Scaffold(
+        drawer: Drawer(
+          child: Column(
+            children: <Widget>[
+              AppBar(
+                title: Text("Options"),
+                automaticallyImplyLeading: false,
+              ),
+              ListTile(
+                title: Text("Manage Vet"),
+                onTap: () {
+                 Navigator.pushReplacementNamed(context, '/manager_admin/');
+                },
+              )
+            ],
+          ),
+        ),
+        appBar: AppBar(
+          title: Text("Vet Lab"),
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("Super List"),
-      ),
-      body: AnimalManager(),
+        ),
+        body: AnimalManager(animals, addAnimal, removeAnimal),
+
     );
   }
-
 }

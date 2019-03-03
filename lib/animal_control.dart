@@ -14,7 +14,7 @@ class AnimalController extends StatelessWidget{
     return RaisedButton(
       color: Theme.of(context).primaryColorLight,
       onPressed: () {
-            mAddProduct('Piglet');
+            mAddProduct({'title':'Forest cats', 'imageUrl':'asset/cat.jpeg'});
       },
       child: Text("Add Something"),
     );

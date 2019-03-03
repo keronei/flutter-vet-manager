@@ -2,21 +2,28 @@ import 'package:flutter/material.dart';
 import './paging/animal.dart';
 
 class Animals extends StatelessWidget {
-  final List<String> animals;
+  final List<Map<String, String>> animals;
 
-  Animals(this.animals) {}
+  final Function deleteAnimal;
+
+  Animals(this.animals,{this.deleteAnimal} ) {}
 
   Widget _buildAnimalsList(BuildContext context, int position) {
     return Card(
       child: Column(
         children: <Widget>[
-          Image.asset('asset/cat.jpeg'),
-          Text(animals[position]),
+          Image.asset(animals[position]['imageUrl']),
+          Text(animals[position]['title']),
           ButtonBar(
             alignment: MainAxisAlignment.center,
             children: <Widget>[
               FlatButton(child: Text("View"), onPressed: (){
-                Navigator.push(context, MaterialPageRoute(builder: (BuildContext context)=>AnimalPage()));
+                Navigator.pushNamed<String>(context, '/animal/'+position.toString())
+                    .then((String onValue){
+                  if (onValue == 'remove'){
+                    deleteAnimal(position);
+                  }
+                });
               },)
             ],
           )

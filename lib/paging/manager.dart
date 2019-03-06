@@ -8,6 +8,11 @@ import 'animal_add.dart';
 import 'animal_list.dart';
 
 class ManageAnimalsTop extends StatelessWidget{
+  final Function addAnimal;
+  final Function removeAnimal;
+
+  const ManageAnimalsTop( this.addAnimal, this.removeAnimal) ;
+
   @override
   Widget build(BuildContext context) {
 
@@ -40,7 +45,7 @@ class ManageAnimalsTop extends StatelessWidget{
         ]),
       ),
       body: TabBarView(children: [
-        AddNewAnimal(),
+        AddNewAnimal(addAnimal),
         AnimalList(),
 
       ]),

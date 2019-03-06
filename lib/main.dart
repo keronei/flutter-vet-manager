@@ -20,9 +20,9 @@ class CoolApp extends StatefulWidget {
 }
 
 class _CoolAppState extends State<CoolApp> {
-  final List<Map<String, String>> _animals = [];
+  final List<Map<String, dynamic>> _animals = [];
 
-  void _addAnAnimal(Map<String, String> animal) {
+  void _addAnAnimal(Map<String, dynamic> animal) {
     setState(() {
       _animals.add(animal);
     });
@@ -42,11 +42,12 @@ class _CoolAppState extends State<CoolApp> {
         accentColor: Colors.cyanAccent,
         primarySwatch: Colors.cyan,
       ),
-      //home: Auth(),
+      home: AuthPage(),
       routes: {
-        '/': (BuildContext context) =>
-            AnimalsPage(_animals, _addAnAnimal, _deleteAnimal),
-        '/manager_admin/': (BuildContext context) => ManageAnimalsTop(),
+        '/home': (BuildContext context) =>
+            AnimalsPage(_animals),
+        '/manager_admin/': (BuildContext context) =>
+            ManageAnimalsTop(_addAnAnimal, _deleteAnimal),
       },
 
       onGenerateRoute: (RouteSettings settings) {
@@ -66,7 +67,7 @@ class _CoolAppState extends State<CoolApp> {
       },
       onUnknownRoute: (RouteSettings params){
         return MaterialPageRoute(builder: (BuildContext context)=>
-            AnimalsPage(_animals, _addAnAnimal, _deleteAnimal),
+            AnimalsPage(_animals),
         );
       },
     );

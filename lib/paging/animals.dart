@@ -8,12 +8,10 @@ import '../animal_manager.dart';
 
 class AnimalsPage extends StatelessWidget {
 
-  final List<Map<String, String> > animals;
+  final List<Map<String, dynamic> > animals;
 
-  final Function addAnimal;
-  final Function removeAnimal;
 
-  AnimalsPage(this.animals, this.addAnimal, this.removeAnimal);
+  AnimalsPage(this.animals);
   @override
   Widget build(BuildContext context) {
     return  Scaffold(
@@ -37,7 +35,7 @@ class AnimalsPage extends StatelessWidget {
           title: Text("Vet Lab"),
 
         ),
-        body: AnimalManager(animals, addAnimal, removeAnimal),
+        body: AnimalManager(animals),
 
     );
   }

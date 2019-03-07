@@ -42,9 +42,9 @@ class _CoolAppState extends State<CoolApp> {
         accentColor: Colors.cyanAccent,
         primarySwatch: Colors.cyan,
       ),
-      home: AuthPage(),
+      //home: AuthPage(),
       routes: {
-        '/home': (BuildContext context) =>
+        '/': (BuildContext context) =>
             AnimalsPage(_animals),
         '/manager_admin/': (BuildContext context) =>
             ManageAnimalsTop(_addAnAnimal, _deleteAnimal),

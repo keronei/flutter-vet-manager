@@ -4,12 +4,15 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import '../widgets/ui_elements/title.dart';
+import '../widgets/animals/address_tag.dart';
+import '../widgets/animals/price_tag.dart';
 
 class AnimalPage extends StatelessWidget {
   final String title;
   final String imageUrl;
+  final double price;
 
-  AnimalPage(this.title, this.imageUrl);
+  AnimalPage(this.title, this.imageUrl, this.price);
 
   _ShowWarningDialog(BuildContext context) {
     showDialog(
@@ -37,6 +40,28 @@ class AnimalPage extends StatelessWidget {
         });
   }
 
+  Widget _buildAddressPriceRow() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        Text(
+          'Trans-Zoia, Ke',
+          style: TextStyle(fontFamily: 'Oswald', color: Colors.grey),
+        ),
+        Container(
+          margin: EdgeInsets.symmetric(horizontal: 5.0),
+          child: Text(
+            '|',
+            style: TextStyle(color: Colors.grey),
+          ),
+        ),
+        Text(
+          'Ksh. ' + price.toString(),
+          style: TextStyle(fontFamily: 'Oswald', color: Colors.grey),
+        )
+      ],
+    );
+  }
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -54,6 +79,7 @@ class AnimalPage extends StatelessWidget {
           children: [
             Image.asset(imageUrl),
             Container(padding: EdgeInsets.all(9.0), child: TitleDefault(title)),
+            _buildAddressPriceRow(),
             Container(
               padding: EdgeInsets.all(9.0),
               child: RaisedButton(

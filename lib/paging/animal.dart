@@ -3,6 +3,7 @@
  */
 import 'dart:async';
 import 'package:flutter/material.dart';
+import '../widgets/ui_elements/title.dart';
 
 class AnimalPage extends StatelessWidget {
   final String title;
@@ -52,7 +53,7 @@ class AnimalPage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Image.asset(imageUrl),
-            Container(padding: EdgeInsets.all(9.0), child: Text(title)),
+            Container(padding: EdgeInsets.all(9.0), child: TitleDefault(title)),
             Container(
               padding: EdgeInsets.all(9.0),
               child: RaisedButton(

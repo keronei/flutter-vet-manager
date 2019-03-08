@@ -13,24 +13,29 @@ class ManageAnimalsTop extends StatelessWidget{
 
   const ManageAnimalsTop( this.addAnimal, this.removeAnimal) ;
 
+  Widget _buildDawer(BuildContext context){
+    return Drawer(
+      child: Column(
+        children: <Widget>[
+          AppBar(title: Text("Options"),automaticallyImplyLeading: false,),
+          ListTile(
+            leading: Icon(Icons.shop),
+            title: Text("All animals"),onTap: (){
+            Navigator.pushReplacementNamed(context, '/land/');
+          },
+          )
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
 
     return DefaultTabController(
         length: 2,
         child: Scaffold(
-      drawer: Drawer(
-        child: Column(
-          children: <Widget>[
-            AppBar(title: Text("Options"),automaticallyImplyLeading: false,),
-            ListTile(
-              title: Text("All animals"),onTap: (){
-              Navigator.pushReplacementNamed(context, '/');
-            },
-            )
-          ],
-        ),
-      ),
+      drawer:_buildDawer(context) ,
       appBar: AppBar(
         title: Text("Vet Lab"),
         bottom: TabBar(tabs: [

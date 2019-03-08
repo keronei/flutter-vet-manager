@@ -3,7 +3,7 @@
  */
 
 import 'package:flutter/material.dart';
-import '../animal_manager.dart';
+import '../widgets/animals.dart';
 
 
 class AnimalsPage extends StatelessWidget {
@@ -12,30 +12,40 @@ class AnimalsPage extends StatelessWidget {
 
 
   AnimalsPage(this.animals);
+
+  Widget _buildDrawer(BuildContext context){
+    return Drawer(
+      child: Column(
+        children: <Widget>[
+          AppBar(
+            title: Text("Options"),
+            automaticallyImplyLeading: false,
+          ),
+          ListTile(
+            leading: Icon(Icons.edit),
+            title: Text("Manage Vet"),
+            onTap: () {
+              Navigator.pushReplacementNamed(context, '/manager_admin/');
+            },
+          )
+        ],
+      ),
+    );
+  }
   @override
   Widget build(BuildContext context) {
     return  Scaffold(
-        drawer: Drawer(
-          child: Column(
-            children: <Widget>[
-              AppBar(
-                title: Text("Options"),
-                automaticallyImplyLeading: false,
-              ),
-              ListTile(
-                title: Text("Manage Vet"),
-                onTap: () {
-                 Navigator.pushReplacementNamed(context, '/manager_admin/');
-                },
-              )
-            ],
-          ),
-        ),
+        drawer: _buildDrawer(context),
         appBar: AppBar(
-          title: Text("Vet Lab"),
+          title: Text("Vet Lab", style: TextStyle(color: Colors.white),),
+          actions: <Widget>[
+            IconButton(icon: Icon(Icons.favorite), color: Colors.white, onPressed: (){
+
+            },)
+          ],
 
         ),
-        body: AnimalManager(animals),
+        body: Animals(animals),
 
     );
   }

@@ -1,5 +1,10 @@
+/*
+ * Copyright (c) 2019. Created by keronei lincoln, All rights reserved.
+ */
+
 import 'package:flutter/material.dart';
-import './paging/animal.dart';
+import '../paging/animal.dart';
+import './widgets/price_tag.dart';
 
 class Animals extends StatelessWidget {
   final List<Map<String, dynamic>> animals;
@@ -26,17 +31,7 @@ class Animals extends StatelessWidget {
                   SizedBox(
                     width: 10.0,
                   ),
-                  Container(
-                    padding:
-                        EdgeInsets.symmetric(horizontal: 6.0, vertical: 2.5),
-                    decoration: BoxDecoration(
-                        color: Theme.of(context).accentColor,
-                        borderRadius: BorderRadius.circular(5.0)),
-                    child: Text(
-                      'Ksh. ' + animals[position]["price"].toString(),
-                      style: TextStyle(color: Colors.white),
-                    ),
-                  )
+                  PriceTag(animals[position]["price"].toString())
                 ],
               )),
           DecoratedBox(
@@ -52,13 +47,19 @@ class Animals extends StatelessWidget {
           ButtonBar(
             alignment: MainAxisAlignment.center,
             children: <Widget>[
-              FlatButton(
-                child: Text("View"),
+              IconButton(
+                color: Theme.of(context).accentColor,
+               icon: Icon(Icons.details),
                 onPressed: () {
                   Navigator.pushNamed<String>(
                       context, '/animal/' + position.toString());
                 },
-              )
+              ),
+              IconButton(icon: Icon(Icons.favorite_border),
+                  color:Colors.red,onPressed: (){
+
+
+              }),
             ],
           )
         ],

@@ -41,10 +41,13 @@ class _CoolAppState extends State<CoolApp> {
         brightness: Brightness.light,
         accentColor: Colors.cyanAccent,
         primarySwatch: Colors.cyan,
+        buttonColor: Colors.indigoAccent,
+
       ),
       //home: AuthPage(),
       routes: {
-        '/': (BuildContext context) =>
+        '/' : (BuildContext context) => AuthPage(),
+        '/land/': (BuildContext context) =>
             AnimalsPage(_animals),
         '/manager_admin/': (BuildContext context) =>
             ManageAnimalsTop(_addAnAnimal, _deleteAnimal),

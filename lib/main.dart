@@ -64,7 +64,9 @@ class _CoolAppState extends State<CoolApp> {
           int position = int.parse(params[2]);
           return MaterialPageRoute<String>(
               builder: (BuildContext context) => AnimalPage(
-                  _animals[position]['title'], _animals[position]['imageUrl']));
+                  _animals[position]['title'],
+                  _animals[position]['imageUrl'],
+                  _animals[position]['price']));
         }
         return null;
       },

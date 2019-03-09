@@ -20,9 +20,10 @@ class _AddNewAnimalState extends State<AddNewAnimal> {
   String description;
   double price_;
 
+  final GlobalKey<FormState> _globalKey =  GlobalKey<FormState>();
   Widget _buildAnimalTitleTextField() {
-    return TextField(
-        onChanged: (String value) {
+    return TextFormField(
+        onSaved: (String value) {
           setState(() {
             AnimalTitle = value;
           });
@@ -33,8 +34,8 @@ class _AddNewAnimalState extends State<AddNewAnimal> {
   }
 
   Widget _buildAnimalDescriptionTextField() {
-    return TextField(
-      onChanged: (String name) {
+    return TextFormField(
+      onSaved: (String name) {
         setState(() {
           description = name;
         });
@@ -44,9 +45,9 @@ class _AddNewAnimalState extends State<AddNewAnimal> {
   }
 
   Widget _buildPriceTextField() {
-    return TextField(
+    return TextFormField(
       keyboardType: TextInputType.number,
-      onChanged: (String price) {
+      onSaved: (String price) {
         setState(() {
           price_ = double.parse(price);
         });
@@ -56,6 +57,7 @@ class _AddNewAnimalState extends State<AddNewAnimal> {
   }
 
   void _submitAnimalData() {
+    _globalKey.currentState.save();
     final Map<String, dynamic> newAnimal = {
       'title': AnimalTitle,
       'desc': description,
@@ -76,6 +78,7 @@ class _AddNewAnimalState extends State<AddNewAnimal> {
     return Container(
 
       margin: EdgeInsets.all(10.0),
+      child:Form(
       child: ListView(
         padding: EdgeInsets.symmetric(horizontal: mPadding /2 ),
         children: <Widget>[
@@ -92,7 +95,7 @@ class _AddNewAnimalState extends State<AddNewAnimal> {
             onPressed: _submitAnimalData,
           )
         ],
-      ),
+      ),),
     );
   }
 }

@@ -23,6 +23,12 @@ class _AddNewAnimalState extends State<AddNewAnimal> {
   final GlobalKey<FormState> _globalKey =  GlobalKey<FormState>();
   Widget _buildAnimalTitleTextField() {
     return TextFormField(
+      validator: (String titleProvided){
+        if(titleProvided.isEmpty){
+          return 'Title is reuired';
+        }
+
+      },
         onSaved: (String value) {
           setState(() {
             AnimalTitle = value;
@@ -35,6 +41,11 @@ class _AddNewAnimalState extends State<AddNewAnimal> {
 
   Widget _buildAnimalDescriptionTextField() {
     return TextFormField(
+      validator: (String animalName){
+        if(animalName.isEmpty){
+          return 'Description required';
+        }
+      },
       onSaved: (String name) {
         setState(() {
           description = name;
@@ -46,6 +57,11 @@ class _AddNewAnimalState extends State<AddNewAnimal> {
 
   Widget _buildPriceTextField() {
     return TextFormField(
+      validator: (String inputPrice){
+        if(double.parse(inputPrice) < 5){
+          return 'price cannot be less than Ksh. 5';
+        }
+      },
       keyboardType: TextInputType.number,
       onSaved: (String price) {
         setState(() {
@@ -57,6 +73,9 @@ class _AddNewAnimalState extends State<AddNewAnimal> {
   }
 
   void _submitAnimalData() {
+    if(!_globalKey.currentState.validate()){
+      return;
+    }
     _globalKey.currentState.save();
     final Map<String, dynamic> newAnimal = {
       'title': AnimalTitle,

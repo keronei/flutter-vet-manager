@@ -11,8 +11,9 @@ class AnimalPage extends StatelessWidget {
   final String title;
   final String imageUrl;
   final double price;
+  final String animalDescription;
 
-  AnimalPage(this.title, this.imageUrl, this.price);
+  AnimalPage(this.title, this.imageUrl, this.price, this.animalDescription);
 
   _ShowWarningDialog(BuildContext context) {
     showDialog(
@@ -80,6 +81,13 @@ class AnimalPage extends StatelessWidget {
             Image.asset(imageUrl),
             Container(padding: EdgeInsets.all(9.0), child: TitleDefault(title)),
             _buildAddressPriceRow(),
+            Container(
+              padding: EdgeInsets.all(10.0),
+              child: Text(
+                animalDescription,
+                textAlign: TextAlign.center,
+              ),
+            ),
             Container(
               padding: EdgeInsets.all(9.0),
               child: RaisedButton(

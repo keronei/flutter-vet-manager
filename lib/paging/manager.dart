@@ -4,14 +4,17 @@
 
 import 'package:flutter/material.dart';
 import 'animals.dart';
-import 'animal_add.dart';
+import 'animal_edit.dart';
 import 'animal_list.dart';
 
 class ManageAnimalsTop extends StatelessWidget{
   final Function addAnimal;
-  final Function removeAnimal;
+  final Function updateAnimal;
 
-  const ManageAnimalsTop( this.addAnimal, this.removeAnimal) ;
+  final Function removeAnimal;
+  final List<Map<String, dynamic>> animals;
+
+  const ManageAnimalsTop( this.addAnimal,this.updateAnimal, this.removeAnimal, this.animals) ;
 
   Widget _buildDawer(BuildContext context){
     return Drawer(
@@ -50,8 +53,8 @@ class ManageAnimalsTop extends StatelessWidget{
         ]),
       ),
       body: TabBarView(children: [
-        AddNewAnimal(addAnimal),
-        AnimalList(),
+        editAnimal(addAnimal: addAnimal),
+        AnimalList(animals, updateAnimal),
 
       ]),
     ),);

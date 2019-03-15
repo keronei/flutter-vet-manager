@@ -3,6 +3,7 @@
  */
 
 import 'package:flutter/material.dart';
+import '../widgets/helpers/ensure-visible.dart';
 
 class editAnimal extends StatefulWidget {
   final Function addAnimal;
@@ -28,9 +29,18 @@ class _editAnimalState extends State<editAnimal> {
   };
 
   final GlobalKey<FormState> _globalKey = GlobalKey<FormState>();
+  final _titleFocusNode = FocusNode();
+
+  final _descFocusNode = FocusNode();
+
+  final _priceFocusNode = FocusNode();
 
   Widget _buildAnimalTitleTextField() {
-    return TextFormField(
+    return EnsureVisibleWhenFocused(
+      focusNode: _titleFocusNode,
+      child:
+        TextFormField(
+          focusNode: _titleFocusNode,
         initialValue:
             widget.singleAnimal == null ? '' : widget.singleAnimal['title'],
         validator: (String titleProvided) {
@@ -43,11 +53,15 @@ class _editAnimalState extends State<editAnimal> {
         },
         decoration: InputDecoration(
           labelText: "Title",
-        ));
+        )),);
   }
 
   Widget _buildAnimalDescriptionTextField() {
-    return TextFormField(
+    return EnsureVisibleWhenFocused(
+        focusNode: _descFocusNode,
+        child:
+        TextFormField(
+        focusNode: _descFocusNode,
       initialValue:
           widget.singleAnimal == null ? '' : widget.singleAnimal['desc'],
       validator: (String animalName) {
@@ -59,11 +73,15 @@ class _editAnimalState extends State<editAnimal> {
         animalAddForm['desc'] = name;
       },
       decoration: InputDecoration(labelText: 'Description'),
-    );
+    ),);
   }
 
   Widget _buildPriceTextField() {
-    return TextFormField(
+    return EnsureVisibleWhenFocused(
+        focusNode: _priceFocusNode,
+        child:
+        TextFormField(
+        focusNode: _priceFocusNode,
       initialValue:
           widget.singleAnimal == null ? '' : widget.singleAnimal['price'].toString(),
       validator: (String inputPrice) {
@@ -77,7 +95,7 @@ class _editAnimalState extends State<editAnimal> {
         animalAddForm['price'] = double.parse(price);
       },
       decoration: InputDecoration(labelText: 'Price'),
-    );
+    ),);
   }
 
   void _submitAnimalData() {

@@ -28,6 +28,13 @@ class _CoolAppState extends State<CoolApp> {
     });
   }
 
+  void _updateAnimal(int index, Map<String, dynamic> animalData){
+    setState(() {
+      _animals[index] = animalData;
+
+    });
+  }
+
   void _deleteAnimal(int position) {
     setState(() {
       _animals.removeAt(position);
@@ -50,7 +57,7 @@ class _CoolAppState extends State<CoolApp> {
         '/land/': (BuildContext context) =>
             AnimalsPage(_animals),
         '/manager_admin/': (BuildContext context) =>
-            ManageAnimalsTop(_addAnAnimal, _deleteAnimal),
+            ManageAnimalsTop(_addAnAnimal, _updateAnimal, _deleteAnimal, _animals),
       },
 
       onGenerateRoute: (RouteSettings settings) {
@@ -66,7 +73,8 @@ class _CoolAppState extends State<CoolApp> {
               builder: (BuildContext context) => AnimalPage(
                   _animals[position]['title'],
                   _animals[position]['imageUrl'],
-                  _animals[position]['price']));
+                  _animals[position]['price'],
+              _animals[position]['desc']));
         }
         return null;
       },

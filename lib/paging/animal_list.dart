@@ -3,9 +3,42 @@
  */
 
 import 'package:flutter/material.dart';
-class AnimalList  extends StatelessWidget{
+import 'animal_edit.dart';
+
+class AnimalList extends StatelessWidget {
+  final List<Map<String, dynamic>> animalList;
+  final Function updateAnimal;
+
+  AnimalList(this.animalList, this.updateAnimal);
+
   @override
   Widget build(BuildContext context) {
-    return Center(child: Text("list"),);
+    return ListView.builder(
+      itemBuilder: (BuildContext context, int index) {
+        return ListTile(
+          leading: Container(
+              height: 32.0,
+              width: 40.0,
+              child: Image.asset(
+                animalList[index]['imageUrl'],
+              )),
+          title: Text(animalList[index]['title']),
+          trailing: IconButton(
+            icon: Icon(Icons.edit),
+            onPressed: () {
+              Navigator.of(context)
+                  .push(MaterialPageRoute(builder: (BuildContext context) {
+                return editAnimal(
+                  singleAnimal: animalList[index],
+                  updateAnimal: updateAnimal,
+                  animalIndex: index,
+                );
+              }));
+            },
+          ),
+        );
+      },
+      itemCount: animalList.length,
+    );
   }
 }

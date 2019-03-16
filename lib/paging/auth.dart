@@ -13,55 +13,62 @@ class AuthPage extends StatefulWidget {
 }
 
 class _AuthState extends State<AuthPage> {
-  String user_mail;
-  String user_password;
-  bool terms_and_conditions = false;
+  final Map<String, dynamic> _formAuthData = {
+    'user_mail': null,
+    'password': null,
+    'tandc': false
+  };
 
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-
-  DecorationImage _decorationImageBuilder(){
-   return  DecorationImage(
+  DecorationImage _decorationImageBuilder() {
+    return DecorationImage(
         fit: BoxFit.cover,
-        colorFilter: ColorFilter.mode(
-            Colors.black.withOpacity(0.3), BlendMode.dstATop),
+        colorFilter:
+            ColorFilter.mode(Colors.black.withOpacity(0.3), BlendMode.dstATop),
         image: AssetImage('asset/catlogin.jpg'));
   }
 
-  Widget _userEmailTF(){
-    return  TextField(
+  Widget _userEmailTF() {
+    return TextFormField(
       decoration: InputDecoration(
-          labelText: "Email",
-          filled: true, fillColor: Colors.white
-      ),
+          labelText: "Email", filled: true, fillColor: Colors.white),
       keyboardType: TextInputType.emailAddress,
-      onChanged: (String musermail) {
-        setState(() {
-          user_mail = musermail;
-        });
+      validator: (String email) {
+        if (email.isEmpty ||
+            !RegExp(r"[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?")
+                .hasMatch(email)) {
+          return 'Please enter a valid email';
+        }
+      },
+      onSaved: (String email) {
+        _formAuthData['user_mail'] = email;
       },
     );
   }
 
-  Widget _userPasswordTF(){
-    return   TextField(
+  Widget _userPasswordTF() {
+    return TextFormField(
       obscureText: true,
       decoration: InputDecoration(
-          labelText: "Password",
-          filled: true, fillColor: Colors.white
-      ),
-      onChanged: (String muserpass) {
-        setState(() {
-          user_password = muserpass;
-        });
+          labelText: "Password", filled: true, fillColor: Colors.white),
+      validator: (String pass) {
+        if (pass.isEmpty || pass.length < 6) {
+          return 'Invalid password';
+        }
+      },
+      onSaved: (String pass) {
+        _formAuthData['password'] = pass;
       },
     );
   }
-  Widget _buildSwitchTile(){
-    return    SwitchListTile(
-      value: terms_and_conditions,
+
+  Widget _buildSwitchTile() {
+    return SwitchListTile(
+      value: _formAuthData['tandc'],
       onChanged: (bool Value) {
         setState(() {
-          terms_and_conditions = Value;
+          _formAuthData['tandc'] = Value;
         });
       },
       title: Text('Agree to T & C'),
@@ -69,45 +76,54 @@ class _AuthState extends State<AuthPage> {
   }
 
   void _submitLogin() {
+    if (!_formKey.currentState.validate() || !_formAuthData['tandc']) {
+      return;
+    }
+    _formKey.currentState.save();
+    print(_formAuthData);
 
     Navigator.pushReplacementNamed(context, '/land');
   }
 
   @override
   Widget build(BuildContext context) {
-
     final double mDeviceWidth = MediaQuery.of(context).size.width;
-    final double mTargetWidth = mDeviceWidth > 768.0 ? 500 : mDeviceWidth * 0.95;
-
+    final double mTargetWidth =
+        mDeviceWidth > 768.0 ? 500 : mDeviceWidth * 0.95;
 
     return Scaffold(
       appBar: AppBar(
         title: Text("Account"),
       ),
       body: Container(
-        decoration: BoxDecoration(
-            image:_decorationImageBuilder()),
+        decoration: BoxDecoration(image: _decorationImageBuilder()),
         padding: EdgeInsets.all(10.0),
-       child: Center(
-
-       child: SingleChildScrollView(
-        child: Container(
-          width:mTargetWidth,
-          child: Column(
-          children: <Widget>[
-           _userEmailTF(),
-            SizedBox(height: 10.0,),
-          _userPasswordTF()
-          ,_buildSwitchTile()
-         ,
-            RaisedButton(
-                child: Text('login'),
-                textColor: Colors.white,
-                onPressed: _submitLogin,)
-          ],
+        child: Center(
+          child: SingleChildScrollView(
+            child: Container(
+              width: mTargetWidth,
+              child: Form(
+                key: _formKey,
+              child: Column(
+                children: <Widget>[
+                  _userEmailTF(),
+                  SizedBox(
+                    height: 10.0,
+                  ),
+                  _userPasswordTF(),
+                  _buildSwitchTile(),
+                  RaisedButton(
+                    child: Text('login'),
+                    textColor: Colors.white,
+                    onPressed: _submitLogin,
+                  )
+                ],
+              ),),
+            ),
+          ),
         ),
-      ),),
-    ),),);
+      ),
+    );
     ;
   }
 }

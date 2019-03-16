@@ -8,8 +8,9 @@ import 'animal_edit.dart';
 class AnimalList extends StatelessWidget {
   final List<Map<String, dynamic>> animalList;
   final Function updateAnimal;
+  final Function removeAnimal;
 
-  AnimalList(this.animalList, this.updateAnimal);
+  AnimalList(this.animalList, this.updateAnimal, this.removeAnimal);
 
   @override
   Widget build(BuildContext context) {
@@ -17,33 +18,46 @@ class AnimalList extends StatelessWidget {
       itemBuilder: (BuildContext context, int index) {
         return Dismissible(
           key: Key(animalList[index]['title']),
-          background: Container(color: Colors.red,),
-          child: Column(
-          children: <Widget>[
-            ListTile(
-              leading: CircleAvatar(
-                  backgroundImage: AssetImage(
-                animalList[index]['imageUrl'],
-              )),
-              title: Text(animalList[index]['title']),
-              subtitle: Text("Ksh. " + animalList[index]['price'].toString()),
-              trailing: IconButton(
-                icon: Icon(Icons.edit),
-                onPressed: () {
-                  Navigator.of(context)
-                      .push(MaterialPageRoute(builder: (BuildContext context) {
-                    return editAnimal(
-                      singleAnimal: animalList[index],
-                      updateAnimal: updateAnimal,
-                      animalIndex: index,
-                    );
-                  }));
-                },
-              ),
+          background: Container(
+            color: Colors.red,
+            padding: EdgeInsets.only(top: 25.0, right: 15.0),
+            child: Text(
+              'Delete',
+              style: TextStyle(fontWeight: FontWeight.w900, fontSize: 30.0),textAlign: TextAlign.right,
             ),
-            Divider(),
-          ],
-        ),);
+          ),
+          onDismissed: (DismissDirection dir) {
+            if (dir == DismissDirection.endToStart) {
+              removeAnimal(index);
+            }
+          },
+          child: Column(
+            children: <Widget>[
+              ListTile(
+                leading: CircleAvatar(
+                    backgroundImage: AssetImage(
+                  animalList[index]['imageUrl'],
+                )),
+                title: Text(animalList[index]['title']),
+                subtitle: Text("Ksh. " + animalList[index]['price'].toString()),
+                trailing: IconButton(
+                  icon: Icon(Icons.edit),
+                  onPressed: () {
+                    Navigator.of(context).push(
+                        MaterialPageRoute(builder: (BuildContext context) {
+                      return editAnimal(
+                        singleAnimal: animalList[index],
+                        updateAnimal: updateAnimal,
+                        animalIndex: index,
+                      );
+                    }));
+                  },
+                ),
+              ),
+              Divider(),
+            ],
+          ),
+        );
       },
       itemCount: animalList.length,
     );

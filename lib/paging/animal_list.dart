@@ -15,25 +15,35 @@ class AnimalList extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListView.builder(
       itemBuilder: (BuildContext context, int index) {
-        return ListTile(
-          leading: CircleAvatar(backgroundImage:AssetImage(
+        return Dismissible(
+          key: Key(animalList[index]['title']),
+          background: Container(color: Colors.red,),
+          child: Column(
+          children: <Widget>[
+            ListTile(
+              leading: CircleAvatar(
+                  backgroundImage: AssetImage(
                 animalList[index]['imageUrl'],
               )),
-          title: Text(animalList[index]['title']),
-          trailing: IconButton(
-            icon: Icon(Icons.edit),
-            onPressed: () {
-              Navigator.of(context)
-                  .push(MaterialPageRoute(builder: (BuildContext context) {
-                return editAnimal(
-                  singleAnimal: animalList[index],
-                  updateAnimal: updateAnimal,
-                  animalIndex: index,
-                );
-              }));
-            },
-          ),
-        );
+              title: Text(animalList[index]['title']),
+              subtitle: Text("Ksh. " + animalList[index]['price'].toString()),
+              trailing: IconButton(
+                icon: Icon(Icons.edit),
+                onPressed: () {
+                  Navigator.of(context)
+                      .push(MaterialPageRoute(builder: (BuildContext context) {
+                    return editAnimal(
+                      singleAnimal: animalList[index],
+                      updateAnimal: updateAnimal,
+                      animalIndex: index,
+                    );
+                  }));
+                },
+              ),
+            ),
+            Divider(),
+          ],
+        ),);
       },
       itemCount: animalList.length,
     );

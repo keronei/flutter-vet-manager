@@ -16,10 +16,7 @@ class AnimalList extends StatelessWidget {
     return ListView.builder(
       itemBuilder: (BuildContext context, int index) {
         return ListTile(
-          leading: Container(
-              height: 32.0,
-              width: 40.0,
-              child: Image.asset(
+          leading: CircleAvatar(backgroundImage:AssetImage(
                 animalList[index]['imageUrl'],
               )),
           title: Text(animalList[index]['title']),

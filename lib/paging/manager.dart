@@ -54,7 +54,7 @@ class ManageAnimalsTop extends StatelessWidget{
       ),
       body: TabBarView(children: [
         editAnimal(addAnimal: addAnimal),
-        AnimalList(animals, updateAnimal),
+        AnimalList(animals, updateAnimal, removeAnimal),
 
       ]),
     ),);

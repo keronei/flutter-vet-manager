@@ -4,7 +4,7 @@ import './paging/auth.dart';
 import './paging/manager.dart';
 import './paging/animals.dart';
 import './paging/animal.dart';
-
+import './models/animal.dart';
 void main() {
 //debugPaintSizeEnabled = true;
 //debugPaintBaselinesEnabled = true;
@@ -20,15 +20,15 @@ class CoolApp extends StatefulWidget {
 }
 
 class _CoolAppState extends State<CoolApp> {
-  final List<Map<String, dynamic>> _animals = [];
+  final List<Animal> _animals = [];
 
-  void _addAnAnimal(Map<String, dynamic> animal) {
+  void _addAnAnimal(Animal animal) {
     setState(() {
       _animals.add(animal);
     });
   }
 
-  void _updateAnimal(int index, Map<String, dynamic> animalData){
+  void _updateAnimal(int index, Animal animalData){
     setState(() {
       _animals[index] = animalData;
 
@@ -71,10 +71,10 @@ class _CoolAppState extends State<CoolApp> {
           int position = int.parse(params[2]);
           return MaterialPageRoute<String>(
               builder: (BuildContext context) => AnimalPage(
-                  _animals[position]['title'],
-                  _animals[position]['imageUrl'],
-                  _animals[position]['price'],
-              _animals[position]['desc']));
+                  _animals[position].title,
+                  _animals[position].imageUrl,
+                  _animals[position].price,
+              _animals[position].desc));
         }
         return null;
       },

@@ -5,9 +5,10 @@
 import 'package:flutter/material.dart';
 import '../paging/animal.dart';
 import './animals/animals_card.dart';
+import '../models/animal.dart';
 
 class Animals extends StatelessWidget {
-  final List<Map<String, dynamic>> animals;
+  final List<Animal> animals;
 
   Animals(this.animals) {}
 

@@ -6,9 +6,10 @@ import 'package:flutter/material.dart';
 import 'price_tag.dart';
 import '../ui_elements/title.dart';
 import './address_tag.dart';
+import '../../models/animal.dart';
 
 class AnimalCard extends StatelessWidget {
-  final Map<String, dynamic> animal;
+  final Animal animal;
 
   final int animalIndex;
 
@@ -19,11 +20,11 @@ class AnimalCard extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            TitleDefault(animal['title']),
+            TitleDefault(animal.title),
             SizedBox(
               width: 10.0,
             ),
-            PriceTag(animal["price"].toString())
+            PriceTag(animal.price.toString())
           ],
         ));
   }
@@ -52,7 +53,7 @@ class AnimalCard extends StatelessWidget {
     return Card(
       child: Column(
         children: <Widget>[
-          Image.asset(animal['imageUrl']),
+          Image.asset(animal.imageUrl),
      _buldTitleAndTag()
      ,
          AddressTag('Trans-Zoia, Ke'),

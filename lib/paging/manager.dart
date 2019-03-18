@@ -6,13 +6,14 @@ import 'package:flutter/material.dart';
 import 'animals.dart';
 import 'animal_edit.dart';
 import 'animal_list.dart';
+import '../models/animal.dart';
 
 class ManageAnimalsTop extends StatelessWidget{
   final Function addAnimal;
   final Function updateAnimal;
 
   final Function removeAnimal;
-  final List<Map<String, dynamic>> animals;
+  final List<Animal> animals;
 
   const ManageAnimalsTop( this.addAnimal,this.updateAnimal, this.removeAnimal, this.animals) ;
 

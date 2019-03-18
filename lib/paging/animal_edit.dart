@@ -35,6 +35,41 @@ class _editAnimalState extends State<editAnimal> {
 
   final _priceFocusNode = FocusNode();
 
+  Widget pageStructureContent() {
+
+    final double mDeviceWidth = MediaQuery.of(context).size.width;
+    final double mTargetWidth =
+    mDeviceWidth > 550.0 ? 500 : mDeviceWidth * 0.95;
+    final double mPadding = mDeviceWidth - mTargetWidth;
+
+    return GestureDetector(
+      onTap: () {
+        FocusScope.of(context).requestFocus(FocusNode());
+      },
+      child: Container(
+        margin: EdgeInsets.all(10.0),
+        child: Form(
+          key: _globalKey,
+          child: ListView(
+            padding: EdgeInsets.symmetric(horizontal: mPadding / 2),
+            children: <Widget>[
+              _buildAnimalTitleTextField(),
+              _buildAnimalDescriptionTextField(),
+              _buildPriceTextField(),
+              SizedBox(
+                height: 10.0,
+              ),
+              RaisedButton(
+                textColor: Colors.white,
+                child: Text('Save'),
+                onPressed: _submitAnimalData,
+              )
+            ],
+          ),
+        ),
+      ),
+    );
+  }
   Widget _buildAnimalTitleTextField() {
     return EnsureVisibleWhenFocused(
       focusNode: _titleFocusNode,
@@ -115,38 +150,9 @@ class _editAnimalState extends State<editAnimal> {
 
   @override
   Widget build(BuildContext context) {
-    final double mDeviceWidth = MediaQuery.of(context).size.width;
-    final double mTargetWidth =
-        mDeviceWidth > 550.0 ? 500 : mDeviceWidth * 0.95;
-    final double mPadding = mDeviceWidth - mTargetWidth;
 
-    Widget pageStructure = GestureDetector(
-      onTap: () {
-        FocusScope.of(context).requestFocus(FocusNode());
-      },
-      child: Container(
-        margin: EdgeInsets.all(10.0),
-        child: Form(
-          key: _globalKey,
-          child: ListView(
-            padding: EdgeInsets.symmetric(horizontal: mPadding / 2),
-            children: <Widget>[
-              _buildAnimalTitleTextField(),
-              _buildAnimalDescriptionTextField(),
-              _buildPriceTextField(),
-              SizedBox(
-                height: 10.0,
-              ),
-              RaisedButton(
-                textColor: Colors.white,
-                child: Text('Save'),
-                onPressed: _submitAnimalData ,
-              )
-            ],
-          ),
-        ),
-      ),
-    );
+
+    Widget pageStructure = pageStructureContent();
 
     return widget.singleAnimal == null
         ? pageStructure

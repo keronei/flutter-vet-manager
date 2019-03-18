@@ -12,6 +12,22 @@ class AnimalList extends StatelessWidget {
 
   AnimalList(this.animalList, this.updateAnimal, this.removeAnimal);
 
+  Widget _iconButton(BuildContext context, int index){
+    return IconButton(
+      icon: Icon(Icons.edit),
+      onPressed: () {
+        Navigator.of(context).push(
+            MaterialPageRoute(builder: (BuildContext context) {
+              return editAnimal(
+                singleAnimal: animalList[index],
+                updateAnimal: updateAnimal,
+                animalIndex: index,
+              );
+            }));
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
@@ -40,19 +56,7 @@ class AnimalList extends StatelessWidget {
                 )),
                 title: Text(animalList[index]['title']),
                 subtitle: Text("Ksh. " + animalList[index]['price'].toString()),
-                trailing: IconButton(
-                  icon: Icon(Icons.edit),
-                  onPressed: () {
-                    Navigator.of(context).push(
-                        MaterialPageRoute(builder: (BuildContext context) {
-                      return editAnimal(
-                        singleAnimal: animalList[index],
-                        updateAnimal: updateAnimal,
-                        animalIndex: index,
-                      );
-                    }));
-                  },
-                ),
+                trailing: _iconButton(context, index),
               ),
               Divider(),
             ],

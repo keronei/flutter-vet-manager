@@ -4,9 +4,10 @@
 
 import 'package:flutter/material.dart';
 import 'animal_edit.dart';
+import '../models/animal.dart';
 
 class AnimalList extends StatelessWidget {
-  final List<Map<String, dynamic>> animalList;
+  final List<Animal> animalList;
   final Function updateAnimal;
   final Function removeAnimal;
 
@@ -33,7 +34,7 @@ class AnimalList extends StatelessWidget {
     return ListView.builder(
       itemBuilder: (BuildContext context, int index) {
         return Dismissible(
-          key: Key(animalList[index]['title']),
+          key: Key(animalList[index].title),
           background: Container(
             color: Colors.red,
             padding: EdgeInsets.only(top: 25.0, right: 15.0),
@@ -52,10 +53,10 @@ class AnimalList extends StatelessWidget {
               ListTile(
                 leading: CircleAvatar(
                     backgroundImage: AssetImage(
-                  animalList[index]['imageUrl'],
+                  animalList[index].imageUrl,
                 )),
-                title: Text(animalList[index]['title']),
-                subtitle: Text("Ksh. " + animalList[index]['price'].toString()),
+                title: Text(animalList[index].title),
+                subtitle: Text("Ksh. " + animalList[index].price.toString()),
                 trailing: _iconButton(context, index),
               ),
               Divider(),

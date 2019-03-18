@@ -4,11 +4,11 @@
 
 import 'package:flutter/material.dart';
 import '../widgets/animals.dart';
-
+import '../models/animal.dart';
 
 class AnimalsPage extends StatelessWidget {
 
-  final List<Map<String, dynamic> > animals;
+  final List<Animal > animals;
 
 
   AnimalsPage(this.animals);

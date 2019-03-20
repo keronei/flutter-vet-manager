@@ -37,13 +37,13 @@ class _EditAnimalState extends State<EditAnimal> {
           textColor: Colors.white,
           child: Text('Save'),
           onPressed: () => _submitAnimalData(
-              model.addAnAnimal, model.updateAnimal, model.selectedIndex),
+              model.addAnAnimal, model.updateAnimal,model.selectAnimalIndex, model.selectedIndex),
         );
       },
     );
   }
 
-  Widget pageStructureContent(Animal animalSelected) {
+  Widget pageStructureContent(BuildContext context, Animal animalSelected) {
     final double mDeviceWidth = MediaQuery.of(context).size.width;
     final double mTargetWidth =
         mDeviceWidth > 550.0 ? 500 : mDeviceWidth * 0.95;
@@ -60,7 +60,7 @@ class _EditAnimalState extends State<EditAnimal> {
           child: ListView(
             padding: EdgeInsets.symmetric(horizontal: mPadding / 2),
             children: <Widget>[
-              _buildAnimalTitleTextField(animalSelected),
+             _buildAnimalTitleTextField(animalSelected),
               _buildAnimalDescriptionTextField(animalSelected),
               _buildPriceTextField(animalSelected),
               SizedBox(
@@ -82,7 +82,7 @@ class _EditAnimalState extends State<EditAnimal> {
           initialValue: selectedAnimal == null ? '' : selectedAnimal.title,
           validator: (String titleProvided) {
             if (titleProvided.isEmpty || titleProvided.length < 5) {
-              return 'Title is reuired, 5 characters min';
+              return 'Title is required, 5 characters min';
             }
           },
           onSaved: (String value) {
@@ -135,7 +135,8 @@ class _EditAnimalState extends State<EditAnimal> {
     );
   }
 
-  void _submitAnimalData(Function addAnimal, Function updateAnimal,
+  void _submitAnimalData(Function addAnimal, Function updateAnimal
+  ,indicateNotInterestedAnymore,
       [int selectedAnimalIndex]) {
     if (!_globalKey.currentState.validate()) {
       return;
@@ -157,14 +158,14 @@ class _EditAnimalState extends State<EditAnimal> {
         animalAddForm['price'],
       );
     }
-    Navigator.pushReplacementNamed(context, '/land/');
+    Navigator.pushReplacementNamed(context, '/land/').then((_)=>indicateNotInterestedAnymore(null));
   }
 
   @override
   Widget build(BuildContext context) {
     return ScopedModelDescendant<MainModel>(
         builder: (BuildContext context, Widget child, MainModel model) {
-      Widget pageStructure = pageStructureContent(model.selectedAnimal());
+     final Widget pageStructure = pageStructureContent(context, model.selectedAnimal);
       return model.selectedIndex == null
           ? pageStructure
           : Scaffold(

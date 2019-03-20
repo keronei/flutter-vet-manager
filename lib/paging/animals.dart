@@ -4,14 +4,10 @@
 
 import 'package:flutter/material.dart';
 import '../widgets/animals.dart';
-import '../models/animal.dart';
+
 
 class AnimalsPage extends StatelessWidget {
 
-  final List<Animal > animals;
-
-
-  AnimalsPage(this.animals);
 
   Widget _buildDrawer(BuildContext context){
     return Drawer(
@@ -45,7 +41,7 @@ class AnimalsPage extends StatelessWidget {
           ],
 
         ),
-        body: Animals(animals),
+        body: Animals(),
 
     );
   }

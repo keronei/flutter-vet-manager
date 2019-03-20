@@ -5,24 +5,19 @@
 import 'package:flutter/material.dart';
 import '../widgets/helpers/ensure-visible.dart';
 import '../models/animal.dart';
+import 'package:scoped_model/scoped_model.dart';
+import '../scoped_models/animals.dart';
 
-class editAnimal extends StatefulWidget {
-  final Function addAnimal;
-  final Function updateAnimal;
-  final int animalIndex;
+class EditAnimal extends StatefulWidget {
 
-  final Animal singleAnimal;
-
-  editAnimal(
-      {this.addAnimal, this.updateAnimal, this.singleAnimal, this.animalIndex});
 
   @override
   State<StatefulWidget> createState() {
-    return _editAnimalState();
+    return _EditAnimalState();
   }
 }
 
-class _editAnimalState extends State<editAnimal> {
+class _EditAnimalState extends State<EditAnimal> {
   final Map<String, dynamic> animalAddForm = {
     'title': null,
     'desc': null,
@@ -36,8 +31,18 @@ class _editAnimalState extends State<editAnimal> {
   final _descFocusNode = FocusNode();
 
   final _priceFocusNode = FocusNode();
+  Widget _buildSubmitButton(){
+  return ScopedModelDescendant<AnimalsModel>(builder: (BuildContext context, Widget child,AnimalsModel model ){
 
-  Widget pageStructureContent() {
+    return  RaisedButton(
+      textColor: Colors.white,
+      child: Text('Save'),
+      onPressed:()=> _submitAnimalData(model.addAnAnimal,model.updateAnimal,model.selectedIndex ),
+    );
+  },);
+  }
+
+  Widget pageStructureContent(Animal animalSelected) {
     final double mDeviceWidth = MediaQuery.of(context).size.width;
     final double mTargetWidth =
         mDeviceWidth > 550.0 ? 500 : mDeviceWidth * 0.95;
@@ -54,17 +59,13 @@ class _editAnimalState extends State<editAnimal> {
           child: ListView(
             padding: EdgeInsets.symmetric(horizontal: mPadding / 2),
             children: <Widget>[
-              _buildAnimalTitleTextField(),
-              _buildAnimalDescriptionTextField(),
-              _buildPriceTextField(),
+              _buildAnimalTitleTextField(animalSelected),
+              _buildAnimalDescriptionTextField(animalSelected),
+              _buildPriceTextField(animalSelected),
               SizedBox(
                 height: 10.0,
               ),
-              RaisedButton(
-                textColor: Colors.white,
-                child: Text('Save'),
-                onPressed: _submitAnimalData,
-              )
+_buildSubmitButton(),
             ],
           ),
         ),
@@ -72,13 +73,13 @@ class _editAnimalState extends State<editAnimal> {
     );
   }
 
-  Widget _buildAnimalTitleTextField() {
+  Widget _buildAnimalTitleTextField(Animal selectedAnimal) {
     return EnsureVisibleWhenFocused(
       focusNode: _titleFocusNode,
       child: TextFormField(
           focusNode: _titleFocusNode,
           initialValue:
-              widget.singleAnimal == null ? '' : widget.singleAnimal.title,
+              selectedAnimal == null ? '' : selectedAnimal.title,
           validator: (String titleProvided) {
             if (titleProvided.isEmpty || titleProvided.length < 5) {
               return 'Title is reuired, 5 characters min';
@@ -93,13 +94,13 @@ class _editAnimalState extends State<editAnimal> {
     );
   }
 
-  Widget _buildAnimalDescriptionTextField() {
+  Widget _buildAnimalDescriptionTextField(Animal selectedAnimal) {
     return EnsureVisibleWhenFocused(
       focusNode: _descFocusNode,
       child: TextFormField(
         focusNode: _descFocusNode,
         initialValue:
-            widget.singleAnimal == null ? '' : widget.singleAnimal.desc,
+            selectedAnimal == null ? '' : selectedAnimal.desc,
         validator: (String animalName) {
           if (animalName.isEmpty || animalName.length < 6) {
             return 'Description required, 6 characters min';
@@ -113,14 +114,14 @@ class _editAnimalState extends State<editAnimal> {
     );
   }
 
-  Widget _buildPriceTextField() {
+  Widget _buildPriceTextField(Animal selectedAnimal) {
     return EnsureVisibleWhenFocused(
       focusNode: _priceFocusNode,
       child: TextFormField(
         focusNode: _priceFocusNode,
-        initialValue: widget.singleAnimal == null
+        initialValue: selectedAnimal == null
             ? ''
-            : widget.singleAnimal.price.toString(),
+            : selectedAnimal.price.toString(),
         validator: (String inputPrice) {
           if (inputPrice.isEmpty ||
               !RegExp(r'^(?:[1-9]\d*|0)?(?:\.\d+)?$').hasMatch(inputPrice)) {
@@ -136,21 +137,21 @@ class _editAnimalState extends State<editAnimal> {
     );
   }
 
-  void _submitAnimalData() {
+  void _submitAnimalData(Function addAnimal, Function updateAnimal, [int selectedAnimalIndex]) {
     if (!_globalKey.currentState.validate()) {
       return;
     }
     _globalKey.currentState.save();
 
-    if (widget.singleAnimal == null) {
-      widget.addAnimal(Animal(
+    if (selectedAnimalIndex == null) {
+      addAnimal(Animal(
           title: animalAddForm['title'],
           desc: animalAddForm['desc'],
           price: animalAddForm['price'],
           imageUrl: animalAddForm['imageUrl']));
 
     } else {
-      widget.updateAnimal(widget.animalIndex, Animal(
+      updateAnimal( Animal(
           title: animalAddForm['title'],
           desc: animalAddForm['desc'],
           price: animalAddForm['price'],
@@ -161,15 +162,19 @@ class _editAnimalState extends State<editAnimal> {
 
   @override
   Widget build(BuildContext context) {
-    Widget pageStructure = pageStructureContent();
 
-    return widget.singleAnimal == null
+
+    return ScopedModelDescendant<AnimalsModel>(builder: (BuildContext context, Widget child,AnimalsModel model ){
+      Widget pageStructure = pageStructureContent(model.selectedAnimal());
+      return model.selectedIndex == null
         ? pageStructure
         : Scaffold(
             appBar: AppBar(
               title: Text('Update animal'),
             ),
             body: pageStructure,
-          );
-  }
+          );});
+
+}
+
 }

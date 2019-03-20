@@ -52,7 +52,7 @@ class AnimalCard extends StatelessWidget {
                 color: Colors.red,
                 onPressed: () {
                   model.selectAnimalIndex(animalIndex);
-                  model.togleFavouriteStatus();
+                  model.toggleFavouriteStatus();
                 });
           },
         )

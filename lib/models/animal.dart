@@ -8,6 +8,7 @@ class Animal{
   final String desc;
   final double price;
   final String imageUrl;
+  final bool isFavourite;
 
-  Animal({@required this.title, @required this.desc, @required this.price, @required this.imageUrl});
+  Animal({@required this.title, @required this.desc, @required this.price, @required this.imageUrl, this.isFavourite = false});
 }

@@ -17,7 +17,7 @@ class AnimalCard extends StatelessWidget {
 
   const AnimalCard(this.animal, this.animalIndex);
 
-  Widget _buldTitleAndTag() {
+  Widget _buildTitleAndTag() {
     return Container(
         margin: EdgeInsets.only(top: 10.0),
         child: Row(
@@ -66,7 +66,7 @@ class AnimalCard extends StatelessWidget {
       child: Column(
         children: <Widget>[
           Image.asset(animal.imageUrl),
-          _buldTitleAndTag(),
+          _buildTitleAndTag(),
           AddressTag('Trans-Zoia, Ke'),
           Text(animal.mIsCreatedByMail),
           _builtButtons(context),

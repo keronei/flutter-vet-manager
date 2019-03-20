@@ -20,9 +20,7 @@ class AnimalList extends StatelessWidget {
               MaterialPageRoute(builder: (BuildContext context) {
                 return EditAnimal(
                 );
-              })).then((_){
-            model.selectAnimalIndex(null);
-          });
+              }));
         },
       );
 

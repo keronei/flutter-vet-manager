@@ -6,6 +6,7 @@ import 'package:scoped_model/scoped_model.dart';
 import '../models/user.dart';
 import '../models/animal.dart';
 
+
 mixin LinkedAnimalsModel on Model {
   final List<Animal> _animals = [];
   User _authenticatedUser;
@@ -20,10 +21,10 @@ mixin LinkedAnimalsModel on Model {
         mIsCreatedByMail: _authenticatedUser.mEmail,
         mUserId: _authenticatedUser.mId);
     _animals.add(newAnimal);
-    _selectedAnimalIndex = null;
     notifyListeners();
   }
 }
+
 mixin AnimalsModel on LinkedAnimalsModel {
 
 
@@ -45,30 +46,31 @@ List<Animal> get displayAnimals {
 
 }
 
-void togleFavouriteStatus() {
-  final bool currentStatus = selectedAnimal().isFavourite;
+void toggleFavouriteStatus() {
+  final bool currentStatus = selectedAnimal.isFavourite;
   final updatedStatus = !currentStatus;
 
   final Animal updatedAnimalStatus = Animal(
-      title: selectedAnimal().title,
-      desc: selectedAnimal().desc,
-      price: selectedAnimal().price,
-      imageUrl: selectedAnimal().imageUrl,
-      mIsCreatedByMail: selectedAnimal().mIsCreatedByMail,
-      mUserId: selectedAnimal().mUserId,
+      title: selectedAnimal.title,
+      desc: selectedAnimal.desc,
+      price: selectedAnimal.price,
+      imageUrl: selectedAnimal.imageUrl,
+      mIsCreatedByMail: selectedAnimal.mIsCreatedByMail,
+      mUserId: selectedAnimal.mUserId,
       isFavourite: updatedStatus
   );
 
   _animals[_selectedAnimalIndex] = updatedAnimalStatus;
-  _selectedAnimalIndex = null;
+
   notifyListeners();
+  _selectedAnimalIndex = null;
 }
 
 int get selectedIndex {
   return _selectedAnimalIndex;
 }
 
-Animal selectedAnimal() {
+Animal get selectedAnimal {
   if (_selectedAnimalIndex == null) {
     return null;
   }
@@ -87,17 +89,18 @@ void updateAnimal(String title, String desc, String imageUrl, double price) {
       mUserId: _authenticatedUser.mId);
 
   _animals[_selectedAnimalIndex] = updatedAnimal;
-  _selectedAnimalIndex = null;
+
   notifyListeners();
 }
 
 void deleteAnimal() {
   _animals.removeAt(_selectedAnimalIndex);
-  _selectedAnimalIndex = null;
+
   notifyListeners();
 }
 
 void selectAnimalIndex(int index) {
+
   _selectedAnimalIndex = index;
 
   if(index != null){
@@ -105,12 +108,15 @@ void selectAnimalIndex(int index) {
   }
 
 }
+
+
 void toggleDisplay(){
 
   _isDisplayingFavourite = !_isDisplayingFavourite;
   notifyListeners();
 }
 }
+
 mixin UserModel on LinkedAnimalsModel {
 
 

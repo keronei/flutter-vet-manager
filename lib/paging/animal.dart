@@ -73,7 +73,7 @@ class AnimalPage extends StatelessWidget {
       },
       child: ScopedModelDescendant<MainModel>(builder: (BuildContext context, Widget child, MainModel model){
 
-        final List<Animal> animals = model.animals;
+        final List<Animal> animals = model.allAnimals;
 
         Animal singleAnimal = animals[mAnimalIndex];
 

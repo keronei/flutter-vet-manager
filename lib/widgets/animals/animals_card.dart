@@ -48,7 +48,7 @@ class AnimalCard extends StatelessWidget {
           builder: (BuildContext context, Widget child, MainModel model) {
 
             return IconButton(
-                icon: model.animals[animalIndex].isFavourite ? Icon(Icons.favorite) : Icon(Icons.favorite_border),
+                icon: model.allAnimals[animalIndex].isFavourite ? Icon(Icons.favorite) : Icon(Icons.favorite_border),
                 color: Colors.red,
                 onPressed: () {
                   model.selectAnimalIndex(animalIndex);

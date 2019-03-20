@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import '../widgets/ui_elements/title.dart';
 import '../widgets/animals/address_tag.dart';
 import '../widgets/animals/price_tag.dart';
-import '../scoped_models/animals.dart';
+import '../scoped_models/main.dart';
 import '../models/animal.dart';
 
 class AnimalPage extends StatelessWidget {
@@ -71,7 +71,7 @@ class AnimalPage extends StatelessWidget {
 
         return Future.value(false);
       },
-      child: ScopedModelDescendant<AnimalsModel>(builder: (BuildContext context, Widget child, AnimalsModel model){
+      child: ScopedModelDescendant<MainModel>(builder: (BuildContext context, Widget child, MainModel model){
 
         final List<Animal> animals = model.animals;
 

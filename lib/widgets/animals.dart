@@ -5,7 +5,7 @@
 import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
 import './animals/animals_card.dart';
-import '../scoped_models/animals.dart';
+import '../scoped_models/main.dart';
 import '../models/animal.dart';
 
 class Animals extends StatelessWidget {
@@ -24,7 +24,7 @@ class Animals extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ScopedModelDescendant<AnimalsModel>(builder: (BuildContext context, Widget child, AnimalsModel scopeModel){
+    return ScopedModelDescendant<MainModel>(builder: (BuildContext context, Widget child, MainModel scopeModel){
       return _buildWidgetConditionally(scopeModel.displayAnimals);
     },) ;
   }

@@ -4,8 +4,7 @@ import './paging/auth.dart';
 import './paging/manager.dart';
 import './paging/animals.dart';
 import './paging/animal.dart';
-import './models/animal.dart';
-import './scoped_models/animals.dart';
+import './scoped_models/main.dart';
 void main() {
 //debugPaintSizeEnabled = true;
 //debugPaintBaselinesEnabled = true;
@@ -26,8 +25,8 @@ class _CoolAppState extends State<CoolApp> {
 
   @override
   Widget build(BuildContext context) {
-    return ScopedModel<AnimalsModel>(
-      model: AnimalsModel(),
+    return ScopedModel<MainModel>(
+      model: MainModel(),
       child:MaterialApp(
       theme: ThemeData(
         brightness: Brightness.light,

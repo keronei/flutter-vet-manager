@@ -6,11 +6,11 @@ import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'animal_edit.dart';
 import '../models/animal.dart';
-import '../scoped_models/animals.dart';
+import '../scoped_models/main.dart';
 
 class AnimalList extends StatelessWidget {
 
-  Widget _iconButton(BuildContext context, int index, AnimalsModel model){
+  Widget _iconButton(BuildContext context, int index, MainModel model){
 
       return  IconButton(
         icon: Icon(Icons.edit),
@@ -28,7 +28,7 @@ class AnimalList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ScopedModelDescendant<AnimalsModel>(builder: (BuildContext context, Widget child, AnimalsModel model){
+    return ScopedModelDescendant<MainModel>(builder: (BuildContext context, Widget child, MainModel model){
       return ListView.builder(
         itemBuilder: (BuildContext context, int index) {
           return Dismissible(

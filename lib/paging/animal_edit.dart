@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import '../widgets/helpers/ensure-visible.dart';
 import '../models/animal.dart';
 import 'package:scoped_model/scoped_model.dart';
-import '../scoped_models/animals.dart';
+import '../scoped_models/main.dart';
 
 class EditAnimal extends StatefulWidget {
 
@@ -32,7 +32,7 @@ class _EditAnimalState extends State<EditAnimal> {
 
   final _priceFocusNode = FocusNode();
   Widget _buildSubmitButton(){
-  return ScopedModelDescendant<AnimalsModel>(builder: (BuildContext context, Widget child,AnimalsModel model ){
+  return ScopedModelDescendant<MainModel>(builder: (BuildContext context, Widget child,MainModel model ){
 
     return  RaisedButton(
       textColor: Colors.white,
@@ -164,7 +164,7 @@ _buildSubmitButton(),
   Widget build(BuildContext context) {
 
 
-    return ScopedModelDescendant<AnimalsModel>(builder: (BuildContext context, Widget child,AnimalsModel model ){
+    return ScopedModelDescendant<MainModel>(builder: (BuildContext context, Widget child,MainModel model ){
       Widget pageStructure = pageStructureContent(model.selectedAnimal());
       return model.selectedIndex == null
         ? pageStructure

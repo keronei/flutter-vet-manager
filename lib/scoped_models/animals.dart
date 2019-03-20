@@ -4,7 +4,7 @@
 import 'package:scoped_model/scoped_model.dart';
 import '../models/animal.dart';
 
-class AnimalsModel extends Model {
+mixin AnimalsModel on Model {
   int _selectedAnimalIndex;
   final List<Animal> _animals = [];
   bool _isDisplayingFavourite = false;

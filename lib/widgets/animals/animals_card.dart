@@ -8,7 +8,7 @@ import '../ui_elements/title.dart';
 import './address_tag.dart';
 import '../../models/animal.dart';
 import 'package:scoped_model/scoped_model.dart';
-import '../../scoped_models/animals.dart';
+import '../../scoped_models/main.dart';
 
 class AnimalCard extends StatelessWidget {
   final Animal animal;
@@ -44,8 +44,8 @@ class AnimalCard extends StatelessWidget {
                 context, '/animal/' + animalIndex.toString());
           },
         ),
-        ScopedModelDescendant<AnimalsModel>(
-          builder: (BuildContext context, Widget child, AnimalsModel model) {
+        ScopedModelDescendant<MainModel>(
+          builder: (BuildContext context, Widget child, MainModel model) {
 
             return IconButton(
                 icon: model.animals[animalIndex].isFavourite ? Icon(Icons.favorite) : Icon(Icons.favorite_border),

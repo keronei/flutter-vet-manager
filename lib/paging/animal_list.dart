@@ -20,7 +20,9 @@ class AnimalList extends StatelessWidget {
               MaterialPageRoute(builder: (BuildContext context) {
                 return EditAnimal(
                 );
-              }));
+              })).then((_){
+            model.selectAnimalIndex(null);
+          });
         },
       );
 
@@ -32,7 +34,7 @@ class AnimalList extends StatelessWidget {
       return ListView.builder(
         itemBuilder: (BuildContext context, int index) {
           return Dismissible(
-            key: Key(model.animals[index].title),
+            key: Key(model.allAnimals[index].title),
             background: Container(
               color: Colors.red,
               padding: EdgeInsets.only(top: 25.0, right: 15.0),
@@ -52,10 +54,10 @@ class AnimalList extends StatelessWidget {
                 ListTile(
                   leading: CircleAvatar(
                       backgroundImage: AssetImage(
-                        model.animals[index].imageUrl,
+                        model.allAnimals[index].imageUrl,
                       )),
-                  title: Text(model.animals[index].title),
-                  subtitle: Text("Ksh. " + model.animals[index].price.toString()),
+                  title: Text(model.allAnimals[index].title),
+                  subtitle: Text("Ksh. " + model.allAnimals[index].price.toString()),
                   trailing: _iconButton(context, index, model),
                 ),
                 Divider(),
@@ -63,7 +65,7 @@ class AnimalList extends StatelessWidget {
             ),
           );
         },
-        itemCount: model.animals.length,
+        itemCount: model.allAnimals.length,
       );
     },);
   }

@@ -3,25 +3,26 @@
  */
 import 'package:scoped_model/scoped_model.dart';
 import '../models/animal.dart';
+import './linked_animals.dart';
 
-mixin AnimalsModel on Model {
-  int _selectedAnimalIndex;
-  final List<Animal> _animals = [];
+mixin AnimalsModel on LinkedAnimals {
+
+
   bool _isDisplayingFavourite = false;
 
   bool get displayStatus{
     return _isDisplayingFavourite;
   }
 
-  List<Animal> get animals {
-    return List.from(_animals);
+  List<Animal> get allAnimals {
+    return List.from(animals);
   }
 
   List<Animal> get displayAnimals {
     if(_isDisplayingFavourite){
-      return _animals.where((Animal animal)=>animal.isFavourite).toList();
+      return animals.where((Animal animal)=>animal.isFavourite).toList();
     }
-    return List.from(_animals);
+    return List.from(animals);
 
   }
 
@@ -34,45 +35,56 @@ mixin AnimalsModel on Model {
         desc: selectedAnimal().desc,
         price: selectedAnimal().price,
         imageUrl: selectedAnimal().imageUrl,
+      mIsCreatedByMail: selectedAnimal().mIsCreatedByMail,
+      mUserId: selectedAnimal().mUserId,
       isFavourite: updatedStatus
     );
 
-    _animals[_selectedAnimalIndex] = updatedAnimalStatus;
-    _selectedAnimalIndex = null;
+    animals[selectedAnimalIndex] = updatedAnimalStatus;
+    selectedAnimalIndex = null;
     notifyListeners();
   }
 
   int get selectedIndex {
-    return _selectedAnimalIndex;
+    return selectedAnimalIndex;
   }
 
   Animal selectedAnimal() {
-    if (_selectedAnimalIndex == null) {
+    if (selectedAnimalIndex == null) {
       return null;
     }
-    return _animals[_selectedAnimalIndex];
+    return animals[selectedAnimalIndex];
   }
 
-  void addAnAnimal(Animal animal) {
-    _animals.add(animal);
-    _selectedAnimalIndex = null;
-    notifyListeners();
-  }
 
-  void updateAnimal(Animal animalData) {
-    _animals[_selectedAnimalIndex] = animalData;
-    _selectedAnimalIndex = null;
+  void updateAnimal(String title, String desc, String imageUrl, double price) {
+
+    Animal updatedAnimal = Animal(
+        title: title,
+        desc: desc,
+        price: price,
+        imageUrl: imageUrl,
+        mIsCreatedByMail: authenticatedUser.mEmail,
+        mUserId: authenticatedUser.mId);
+
+    animals[selectedAnimalIndex] = updatedAnimal;
+    selectedAnimalIndex = null;
     notifyListeners();
   }
 
   void deleteAnimal() {
-    _animals.removeAt(_selectedAnimalIndex);
-    _selectedAnimalIndex = null;
+    animals.removeAt(selectedAnimalIndex);
+    selectedAnimalIndex = null;
     notifyListeners();
   }
 
   void selectAnimalIndex(int index) {
-    _selectedAnimalIndex = index;
+    selectedAnimalIndex = index;
+
+    if(index != null){
+      notifyListeners();
+    }
+
   }
   void toggleDisplay(){
 

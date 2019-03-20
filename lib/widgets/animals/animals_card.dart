@@ -68,6 +68,7 @@ class AnimalCard extends StatelessWidget {
           Image.asset(animal.imageUrl),
           _buldTitleAndTag(),
           AddressTag('Trans-Zoia, Ke'),
+          Text(animal.mIsCreatedByMail),
           _builtButtons(context),
         ],
       ),

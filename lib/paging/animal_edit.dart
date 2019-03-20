@@ -9,8 +9,6 @@ import 'package:scoped_model/scoped_model.dart';
 import '../scoped_models/main.dart';
 
 class EditAnimal extends StatefulWidget {
-
-
   @override
   State<StatefulWidget> createState() {
     return _EditAnimalState();
@@ -31,15 +29,18 @@ class _EditAnimalState extends State<EditAnimal> {
   final _descFocusNode = FocusNode();
 
   final _priceFocusNode = FocusNode();
-  Widget _buildSubmitButton(){
-  return ScopedModelDescendant<MainModel>(builder: (BuildContext context, Widget child,MainModel model ){
 
-    return  RaisedButton(
-      textColor: Colors.white,
-      child: Text('Save'),
-      onPressed:()=> _submitAnimalData(model.addAnAnimal,model.updateAnimal,model.selectedIndex ),
+  Widget _buildSubmitButton() {
+    return ScopedModelDescendant<MainModel>(
+      builder: (BuildContext context, Widget child, MainModel model) {
+        return RaisedButton(
+          textColor: Colors.white,
+          child: Text('Save'),
+          onPressed: () => _submitAnimalData(
+              model.addAnAnimal, model.updateAnimal, model.selectedIndex),
+        );
+      },
     );
-  },);
   }
 
   Widget pageStructureContent(Animal animalSelected) {
@@ -65,7 +66,7 @@ class _EditAnimalState extends State<EditAnimal> {
               SizedBox(
                 height: 10.0,
               ),
-_buildSubmitButton(),
+              _buildSubmitButton(),
             ],
           ),
         ),
@@ -78,8 +79,7 @@ _buildSubmitButton(),
       focusNode: _titleFocusNode,
       child: TextFormField(
           focusNode: _titleFocusNode,
-          initialValue:
-              selectedAnimal == null ? '' : selectedAnimal.title,
+          initialValue: selectedAnimal == null ? '' : selectedAnimal.title,
           validator: (String titleProvided) {
             if (titleProvided.isEmpty || titleProvided.length < 5) {
               return 'Title is reuired, 5 characters min';
@@ -99,8 +99,7 @@ _buildSubmitButton(),
       focusNode: _descFocusNode,
       child: TextFormField(
         focusNode: _descFocusNode,
-        initialValue:
-            selectedAnimal == null ? '' : selectedAnimal.desc,
+        initialValue: selectedAnimal == null ? '' : selectedAnimal.desc,
         validator: (String animalName) {
           if (animalName.isEmpty || animalName.length < 6) {
             return 'Description required, 6 characters min';
@@ -119,9 +118,8 @@ _buildSubmitButton(),
       focusNode: _priceFocusNode,
       child: TextFormField(
         focusNode: _priceFocusNode,
-        initialValue: selectedAnimal == null
-            ? ''
-            : selectedAnimal.price.toString(),
+        initialValue:
+            selectedAnimal == null ? '' : selectedAnimal.price.toString(),
         validator: (String inputPrice) {
           if (inputPrice.isEmpty ||
               !RegExp(r'^(?:[1-9]\d*|0)?(?:\.\d+)?$').hasMatch(inputPrice)) {
@@ -137,44 +135,44 @@ _buildSubmitButton(),
     );
   }
 
-  void _submitAnimalData(Function addAnimal, Function updateAnimal, [int selectedAnimalIndex]) {
+  void _submitAnimalData(Function addAnimal, Function updateAnimal,
+      [int selectedAnimalIndex]) {
     if (!_globalKey.currentState.validate()) {
       return;
     }
     _globalKey.currentState.save();
 
     if (selectedAnimalIndex == null) {
-      addAnimal(Animal(
-          title: animalAddForm['title'],
-          desc: animalAddForm['desc'],
-          price: animalAddForm['price'],
-          imageUrl: animalAddForm['imageUrl']));
-
+      addAnimal(
+        animalAddForm['title'],
+        animalAddForm['desc'],
+        animalAddForm['imageUrl'],
+        animalAddForm['price'],
+      );
     } else {
-      updateAnimal( Animal(
-          title: animalAddForm['title'],
-          desc: animalAddForm['desc'],
-          price: animalAddForm['price'],
-          imageUrl: animalAddForm['imageUrl']));
+      updateAnimal(
+        animalAddForm['title'],
+        animalAddForm['desc'],
+        animalAddForm['imageUrl'],
+        animalAddForm['price'],
+      );
     }
     Navigator.pushReplacementNamed(context, '/land/');
   }
 
   @override
   Widget build(BuildContext context) {
-
-
-    return ScopedModelDescendant<MainModel>(builder: (BuildContext context, Widget child,MainModel model ){
+    return ScopedModelDescendant<MainModel>(
+        builder: (BuildContext context, Widget child, MainModel model) {
       Widget pageStructure = pageStructureContent(model.selectedAnimal());
       return model.selectedIndex == null
-        ? pageStructure
-        : Scaffold(
-            appBar: AppBar(
-              title: Text('Update animal'),
-            ),
-            body: pageStructure,
-          );});
-
-}
-
+          ? pageStructure
+          : Scaffold(
+              appBar: AppBar(
+                title: Text('Update animal'),
+              ),
+              body: pageStructure,
+            );
+    });
+  }
 }

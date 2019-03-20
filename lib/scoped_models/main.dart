@@ -5,5 +5,6 @@
 import 'package:scoped_model/scoped_model.dart';
 import './animals.dart';
 import './user.dart';
+import './linked_animals.dart';
 
-class MainModel extends Model with AnimalsModel, UserModel {}
+class MainModel extends Model with LinkedAnimals,AnimalsModel, UserModel {}

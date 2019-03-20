@@ -4,11 +4,12 @@
 
 import 'package:scoped_model/scoped_model.dart';
 import '../models/user.dart';
+import './linked_animals.dart';
 
-mixin UserModel on Model {
-  User _authenticatedUser;
+mixin UserModel on LinkedAnimals {
+
 
   void login(String email, String password){
-    _authenticatedUser = User(mId: 'jkjkjk', mEmail: email, mUserPassword: password);
+    authenticatedUser = User(mId: 'jkjkjk', mEmail: email, mUserPassword: password);
   }
 }

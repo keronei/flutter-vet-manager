@@ -3,7 +3,8 @@
  */
 
 import 'package:flutter/material.dart';
-import 'animals.dart';
+import 'package:scoped_model/scoped_model.dart';
+import '../scoped_models/main.dart';
 
 class AuthPage extends StatefulWidget {
   @override
@@ -75,12 +76,12 @@ class _AuthState extends State<AuthPage> {
     );
   }
 
-  void _submitLogin() {
+  void _submitLogin(Function Login) {
     if (!_formKey.currentState.validate() || !_formAuthData['tandc']) {
       return;
     }
     _formKey.currentState.save();
-    print(_formAuthData);
+    Login(_formAuthData['user_mail'], _formAuthData['password']);
 
     Navigator.pushReplacementNamed(context, '/land');
   }
@@ -104,21 +105,26 @@ class _AuthState extends State<AuthPage> {
               width: mTargetWidth,
               child: Form(
                 key: _formKey,
-              child: Column(
-                children: <Widget>[
-                  _userEmailTF(),
-                  SizedBox(
-                    height: 10.0,
-                  ),
-                  _userPasswordTF(),
-                  _buildSwitchTile(),
-                  RaisedButton(
-                    child: Text('login'),
-                    textColor: Colors.white,
-                    onPressed: _submitLogin,
-                  )
-                ],
-              ),),
+                child: Column(
+                  children: <Widget>[
+                    _userEmailTF(),
+                    SizedBox(
+                      height: 10.0,
+                    ),
+                    _userPasswordTF(),
+                    _buildSwitchTile(),
+                    ScopedModelDescendant<MainModel>(
+                      builder: (BuildContext, Widget child, MainModel model) {
+                        return RaisedButton(
+                          child: Text('login'),
+                          textColor: Colors.white,
+                          onPressed:()=> _submitLogin(model.login),
+                        );
+                      },
+                    )
+                  ],
+                ),
+              ),
             ),
           ),
         ),

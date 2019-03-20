@@ -4,6 +4,8 @@
 
 import 'package:flutter/material.dart';
 import '../widgets/animals.dart';
+import 'package:scoped_model/scoped_model.dart';
+import '../scoped_models/animals.dart';
 
 
 class AnimalsPage extends StatelessWidget {
@@ -35,9 +37,12 @@ class AnimalsPage extends StatelessWidget {
         appBar: AppBar(
           title: Text("Vet Lab", style: TextStyle(color: Colors.white),),
           actions: <Widget>[
-            IconButton(icon: Icon(Icons.favorite), color: Colors.white, onPressed: (){
+            ScopedModelDescendant<AnimalsModel>(builder: (BuildContext context, Widget child, AnimalsModel model){
+              return IconButton(icon: Icon(model.displayStatus ? Icons.favorite : Icons.favorite_border ), color: Colors.white, onPressed: (){
+                model.toggleDisplay();
 
-            },)
+              },);
+            },) ,
           ],
 
         ),

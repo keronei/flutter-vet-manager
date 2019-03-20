@@ -25,7 +25,7 @@ class Animals extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ScopedModelDescendant<AnimalsModel>(builder: (BuildContext context, Widget child, AnimalsModel scopeModel){
-      return _buildWidgetConditionally(scopeModel.animals);
+      return _buildWidgetConditionally(scopeModel.displayAnimals);
     },) ;
   }
 }

@@ -33,12 +33,12 @@ class _AnimalListState extends State<AnimalList> {
     return IconButton(
       icon: Icon(Icons.edit),
       onPressed: () {
-        model.selectAnimalIndex(index);
+        model.selectAnimalID(model.allAnimals[index].auto_id);
         Navigator.of(context)
             .push(MaterialPageRoute(builder: (BuildContext context) {
           return EditAnimal();
         })).then((_) {
-          model.selectAnimalIndex(null);
+          model.selectAnimalID(null);
         });
       },
     );
@@ -62,7 +62,7 @@ class _AnimalListState extends State<AnimalList> {
                 ),
               ),
               onDismissed: (DismissDirection dir) {
-                model.selectAnimalIndex(index);
+                model.selectAnimalID(model.allAnimals[index].auto_id);
                 if (dir == DismissDirection.endToStart) {
                   model.deleteAnimal();
                 }

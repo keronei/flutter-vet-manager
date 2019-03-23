@@ -37,7 +37,7 @@ class _EditAnimalState extends State<EditAnimal> {
           textColor: Colors.white,
           child: Text('Save'),
           onPressed: () => _submitAnimalData(
-              model.addAnAnimal, model.updateAnimal,model.selectAnimalIndex, model.selectedIndex),
+              model.addAnAnimal, model.updateAnimal,model.selectAnimalID,model.getMeTheIndex),
         );
       },
     );
@@ -143,7 +143,7 @@ class _EditAnimalState extends State<EditAnimal> {
     }
     _globalKey.currentState.save();
 
-    if (selectedAnimalIndex == null) {
+    if (selectedAnimalIndex == -1) {
       addAnimal(
         animalAddForm['title'],
         animalAddForm['desc'],
@@ -170,7 +170,7 @@ class _EditAnimalState extends State<EditAnimal> {
     return ScopedModelDescendant<MainModel>(
         builder: (BuildContext context, Widget child, MainModel model) {
      final Widget pageStructure = pageStructureContent(context, model.selectedAnimal);
-      return model.selectedIndex == null
+      return model.getMeTheIndex == -1
           ? pageStructure
           : Scaffold(
               appBar: AppBar(

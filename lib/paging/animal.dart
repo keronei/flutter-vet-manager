@@ -79,7 +79,12 @@ class AnimalPage extends StatelessWidget {
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Image.network(animal.imageUrl),
+            FadeInImage(
+              image: NetworkImage(animal.imageUrl),
+              placeholder: AssetImage('asset/cat.jpeg'),
+              height: 200.0,
+              fit: BoxFit.cover,
+            ),
             Container(
                 padding: EdgeInsets.all(9.0),
                 child: TitleDefault(animal.title)),

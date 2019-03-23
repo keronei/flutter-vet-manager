@@ -11,7 +11,7 @@ import 'dart:convert';
 mixin LinkedAnimalsModel on Model {
   List<Animal> _animals = [];
   User _authenticatedUser;
-  int _selectedAnimalIndex;
+  String _selectedAnimalID;
   bool _isLoading = false;
 
   Future<Null> addAnAnimal(
@@ -106,6 +106,7 @@ mixin AnimalsModel on LinkedAnimalsModel {
     final updatedStatus = !currentStatus;
 
     final Animal updatedAnimalStatus = Animal(
+      auto_id: selectedAnimal.auto_id,
         title: selectedAnimal.title,
         desc: selectedAnimal.desc,
         price: selectedAnimal.price,
@@ -114,21 +115,29 @@ mixin AnimalsModel on LinkedAnimalsModel {
         mUserId: selectedAnimal.mUserId,
         isFavourite: updatedStatus);
 
-    _animals[_selectedAnimalIndex] = updatedAnimalStatus;
+    _animals[getMeTheIndex] = updatedAnimalStatus;
 
     notifyListeners();
-    _selectedAnimalIndex = null;
+    _selectedAnimalID = null;
   }
 
-  int get selectedIndex {
-    return _selectedAnimalIndex;
+  String get selectedIndex {
+    return _selectedAnimalID;
+  }
+
+  int get getMeTheIndex{
+    return _animals.indexWhere((Animal animal){
+      return animal.auto_id == _selectedAnimalID;
+    });
   }
 
   Animal get selectedAnimal {
-    if (_selectedAnimalIndex == null) {
+    if (_selectedAnimalID == null) {
       return null;
     }
-    return _animals[_selectedAnimalIndex];
+    return _animals.firstWhere((Animal animal){
+      return animal.auto_id == _selectedAnimalID;
+    });
   }
 
   Future<Null> updateAnimal(
@@ -160,7 +169,7 @@ mixin AnimalsModel on LinkedAnimalsModel {
           mIsCreatedByMail: _authenticatedUser.mEmail,
           mUserId: _authenticatedUser.mId);
 
-      _animals[_selectedAnimalIndex] = updatedAnimal;
+      _animals[getMeTheIndex] = updatedAnimal;
 
       notifyListeners();
     });
@@ -169,9 +178,9 @@ mixin AnimalsModel on LinkedAnimalsModel {
   void deleteAnimal() {
     var deletedID = selectedAnimal.auto_id;
 
-    _animals.removeAt(_selectedAnimalIndex);
+    _animals.removeAt(getMeTheIndex);
 
-    selectAnimalIndex(null);
+    selectAnimalID(null);
 
     notifyListeners();
     _isLoading = true;
@@ -185,10 +194,10 @@ mixin AnimalsModel on LinkedAnimalsModel {
     });
   }
 
-  void selectAnimalIndex(int index) {
-    _selectedAnimalIndex = index;
+  void selectAnimalID(String actual_id) {
+    _selectedAnimalID = actual_id;
 
-    if (index != null) {
+    if (actual_id != null) {
       notifyListeners();
     }
   }

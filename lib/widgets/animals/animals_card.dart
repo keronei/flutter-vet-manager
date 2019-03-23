@@ -51,7 +51,7 @@ class AnimalCard extends StatelessWidget {
                     : Icon(Icons.favorite_border),
                 color: Colors.red,
                 onPressed: () {
-                  model.selectAnimalIndex(animalIndex);
+                  model.selectAnimalID(model.allAnimals[animalIndex].auto_id);
                   model.toggleFavouriteStatus();
                 });
           },

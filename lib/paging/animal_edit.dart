@@ -20,7 +20,7 @@ class _EditAnimalState extends State<EditAnimal> {
     'title': null,
     'desc': null,
     'price': null,
-    'imageUrl': 'asset/cat.jpeg'
+    'imageUrl': 'http://10.0.2.2/images/ruth.png',
   };
 
   final GlobalKey<FormState> _globalKey = GlobalKey<FormState>();
@@ -33,7 +33,7 @@ class _EditAnimalState extends State<EditAnimal> {
   Widget _buildSubmitButton() {
     return ScopedModelDescendant<MainModel>(
       builder: (BuildContext context, Widget child, MainModel model) {
-        return RaisedButton(
+        return model.isLoading ? Center(child: CircularProgressIndicator()) : RaisedButton(
           textColor: Colors.white,
           child: Text('Save'),
           onPressed: () => _submitAnimalData(
@@ -149,16 +149,20 @@ class _EditAnimalState extends State<EditAnimal> {
         animalAddForm['desc'],
         animalAddForm['imageUrl'],
         animalAddForm['price'],
-      );
+      ).then((_){
+          Navigator.pushReplacementNamed(context, '/land/').then((_)=>indicateNotInterestedAnymore(null));
+      });
     } else {
       updateAnimal(
         animalAddForm['title'],
         animalAddForm['desc'],
         animalAddForm['imageUrl'],
         animalAddForm['price'],
-      );
+      ).then((_){
+        Navigator.pushReplacementNamed(context, '/land/').then((_)=>indicateNotInterestedAnymore(null));
+      });
     }
-    Navigator.pushReplacementNamed(context, '/land/').then((_)=>indicateNotInterestedAnymore(null));
+
   }
 
   @override

@@ -8,8 +8,43 @@ import 'package:scoped_model/scoped_model.dart';
 import '../scoped_models/main.dart';
 
 
-class AnimalsPage extends StatelessWidget {
+class AnimalsPage extends StatefulWidget {
 
+  final MainModel model;
+  AnimalsPage(this.model);
+  @override
+  State<StatefulWidget> createState() {
+    return _AnimalsPage();
+  }
+
+}
+
+Widget _buildAnimalsList(){
+  return ScopedModelDescendant<MainModel> (builder: (BuildContext context, Widget child, MainModel model){
+    Widget Content = Center(child: Text('No entries yet'),);
+    if(model.displayAnimals.length > 0 && !model.isLoading){
+      Content = Animals();
+    }else if(model.isLoading){
+      Content = Center( child: CircularProgressIndicator(),);
+    }else{
+
+    }
+    return Content;
+
+
+
+  },);
+
+}
+
+class _AnimalsPage extends State<AnimalsPage>{
+
+  @override
+  initState(){
+    widget.model.fetchDataFromServer();
+    super.initState();
+
+  }
 
   Widget _buildDrawer(BuildContext context){
     return Drawer(
@@ -46,7 +81,7 @@ class AnimalsPage extends StatelessWidget {
           ],
 
         ),
-        body: Animals(),
+        body: _buildAnimalsList()
 
     );
   }

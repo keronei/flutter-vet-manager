@@ -4,6 +4,7 @@
 import 'package:flutter/material.dart';
 
 class Animal {
+  final String auto_id;
   final String title;
   final String desc;
   final double price;
@@ -13,7 +14,8 @@ class Animal {
   final String mUserId;
 
   Animal(
-      {@required this.title,
+      {@required this.auto_id,
+      @required this.title,
       @required this.desc,
       @required this.price,
       @required this.imageUrl,

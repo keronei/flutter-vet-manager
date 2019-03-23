@@ -41,7 +41,7 @@ class AnimalCard extends StatelessWidget {
           icon: Icon(Icons.details),
           onPressed: () {
             Navigator.pushNamed<String>(
-                context, '/animal/' + animalIndex.toString());
+                context, '/animal/' + animal.auto_id);
           },
         ),
         ScopedModelDescendant<MainModel>(
@@ -65,7 +65,7 @@ class AnimalCard extends StatelessWidget {
     return Card(
       child: Column(
         children: <Widget>[
-          Image.asset(animal.imageUrl),
+          Image.network(animal.imageUrl),
           _buildTitleAndTag(),
           AddressTag('Trans-Zoia, Ke'),
           Text(animal.mIsCreatedByMail),

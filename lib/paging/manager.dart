@@ -6,9 +6,11 @@ import 'package:flutter/material.dart';
 import 'animals.dart';
 import 'animal_edit.dart';
 import 'animal_list.dart';
-import '../models/animal.dart';
+import '../scoped_models/main.dart';
 
 class ManageAnimalsTop extends StatelessWidget{
+ final MainModel model;
+  ManageAnimalsTop(this.model);
 
   Widget _buildDawer(BuildContext context){
     return Drawer(
@@ -48,7 +50,7 @@ class ManageAnimalsTop extends StatelessWidget{
       ),
       body: TabBarView(children: [
         EditAnimal(),
-        AnimalList(),
+        AnimalList(model),
 
       ]),
     ),);

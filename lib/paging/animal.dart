@@ -11,9 +11,9 @@ import '../scoped_models/main.dart';
 import '../models/animal.dart';
 
 class AnimalPage extends StatelessWidget {
-  final int mAnimalIndex;
+  final Animal animal;
 
-  AnimalPage(this.mAnimalIndex);
+  AnimalPage(this.animal);
 
   _ShowWarningDialog(BuildContext context) {
     showDialog(
@@ -63,6 +63,7 @@ class AnimalPage extends StatelessWidget {
       ],
     );
   }
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -71,42 +72,36 @@ class AnimalPage extends StatelessWidget {
 
         return Future.value(false);
       },
-      child: ScopedModelDescendant<MainModel>(builder: (BuildContext context, Widget child, MainModel model){
-
-        final List<Animal> animals = model.allAnimals;
-
-        Animal singleAnimal = animals[mAnimalIndex];
-
-        return Scaffold(
-          appBar: AppBar(
-            title: Text(singleAnimal.title),
-          ),
-          body: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Image.asset(singleAnimal.imageUrl),
-              Container(padding: EdgeInsets.all(9.0), child: TitleDefault(singleAnimal.title)),
-              _buildAddressPriceRow(singleAnimal.price),
-              Container(
-                padding: EdgeInsets.all(10.0),
-                child: Text(
-                  singleAnimal.desc,
-                  textAlign: TextAlign.center,
-                ),
-              ),
-              Container(
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text(animal.title),
+        ),
+        body: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Image.network(animal.imageUrl),
+            Container(
                 padding: EdgeInsets.all(9.0),
-                child: RaisedButton(
-                  color: Theme.of(context).accentColor,
-                  child: Text('remove'),
-                  onPressed: () => _ShowWarningDialog(context),
-                ),
-              )
-            ],
-          ),
-        );
-
-      },),
+                child: TitleDefault(animal.title)),
+            _buildAddressPriceRow(animal.price),
+            Container(
+              padding: EdgeInsets.all(10.0),
+              child: Text(
+                animal.desc,
+                textAlign: TextAlign.center,
+              ),
+            ),
+            Container(
+              padding: EdgeInsets.all(9.0),
+              child: RaisedButton(
+                color: Theme.of(context).accentColor,
+                child: Text('remove'),
+                onPressed: () => _ShowWarningDialog(context),
+              ),
+            )
+          ],
+        ),
+      ),
     );
   }
 }

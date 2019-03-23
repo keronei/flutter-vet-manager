@@ -7,4 +7,4 @@ import './linked_animals.dart';
 
 
 
-class MainModel extends Model with LinkedAnimalsModel,AnimalsModel, UserModel {}
+class MainModel extends Model with LinkedAnimalsModel,AnimalsModel, UserModel, UtilitiesModel {}

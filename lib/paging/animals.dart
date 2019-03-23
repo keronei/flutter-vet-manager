@@ -29,7 +29,7 @@ Widget _buildAnimalsList(){
     }else{
 
     }
-    return Content;
+    return RefreshIndicator(child: Content, onRefresh: model.fetchDataFromServer);
 
 
 

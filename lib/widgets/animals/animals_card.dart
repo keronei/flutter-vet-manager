@@ -40,15 +40,15 @@ class AnimalCard extends StatelessWidget {
           color: Theme.of(context).accentColor,
           icon: Icon(Icons.details),
           onPressed: () {
-            Navigator.pushNamed<String>(
-                context, '/animal/' + animal.auto_id);
+            Navigator.pushNamed<String>(context, '/animal/${animal.auto_id}');
           },
         ),
         ScopedModelDescendant<MainModel>(
           builder: (BuildContext context, Widget child, MainModel model) {
-
             return IconButton(
-                icon: model.allAnimals[animalIndex].isFavourite ? Icon(Icons.favorite) : Icon(Icons.favorite_border),
+                icon: model.allAnimals[animalIndex].isFavourite
+                    ? Icon(Icons.favorite)
+                    : Icon(Icons.favorite_border),
                 color: Colors.red,
                 onPressed: () {
                   model.selectAnimalIndex(animalIndex);
@@ -65,7 +65,12 @@ class AnimalCard extends StatelessWidget {
     return Card(
       child: Column(
         children: <Widget>[
-          Image.network(animal.imageUrl),
+          FadeInImage(
+            image: NetworkImage(animal.imageUrl),
+            placeholder: AssetImage('asset/cat.jpeg'),
+            height: 200.0,
+            fit: BoxFit.cover,
+          ),
           _buildTitleAndTag(),
           AddressTag('Trans-Zoia, Ke'),
           Text(animal.mIsCreatedByMail),

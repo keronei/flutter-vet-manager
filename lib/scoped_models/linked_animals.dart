@@ -48,10 +48,10 @@ mixin LinkedAnimalsModel on Model {
     });
   }
 
-  void fetchDataFromServer() {
+  Future<Null> fetchDataFromServer() {
     _isLoading = true;
     notifyListeners();
-    my_api
+   return my_api
         .get('http://10.0.2.2:5000/api/v1/vet/')
         .then((my_api.Response response) {
       final Map<String, dynamic> receivedList = json.decode(response.body);

@@ -14,34 +14,32 @@ mixin LinkedAnimalsModel on Model {
   String _selectedAnimalID;
   bool _isLoading = false;
 
-  String urlPointer = "http://localhost"; //localhost for iOS or http://10.0.2.2 for android
-
-
+  String urlPointer =
+      "http://localhost"; //localhost for iOS or http://10.0.2.2 for android
 
   Future<bool> addAnAnimal(
-      String title, String desc, String imageUrl, double price) {
+      String title, String desc, String imageUrl, double price) async {
     _isLoading = true;
     notifyListeners();
     final Map<String, dynamic> animalData = {
       'title': title,
       'desc': desc,
-      'imageurl': urlPointer+'/images/ruth.png',
+      'imageurl': urlPointer + '/images/ruth.png',
       'price': price,
       'user_mail': _authenticatedUser.mEmail,
       'user_id': _authenticatedUser.mId
     };
+    try {
+      my_api.Response response = await my_api.post(
+          urlPointer + ':5000/api/v1/vet/',
+          body: json.encode(animalData),
+          headers: {'content-type': 'application/json'});
 
-    return my_api.post(urlPointer+':5000/api/v1/vet/',
-        body: json.encode(animalData),
-        headers: {
-          'content-type': 'application/json'
-        }).then((my_api.Response response) {
-
-          if (response.statusCode != 201){
-            _isLoading = false;
-            notifyListeners();
-            return false;
-          }
+      if (response.statusCode != 201) {
+        _isLoading = false;
+        notifyListeners();
+        return false;
+      }
       final Map<String, dynamic> returnedResponse = json.decode(response.body);
 
       Animal newAnimal = Animal(
@@ -49,25 +47,26 @@ mixin LinkedAnimalsModel on Model {
           title: title,
           desc: desc,
           price: price,
-          imageUrl: urlPointer+'/images/ruth.png',
+          imageUrl: urlPointer + '/images/ruth.png',
           mIsCreatedByMail: _authenticatedUser.mEmail,
           mUserId: _authenticatedUser.mId);
       _animals.add(newAnimal);
       _isLoading = false;
       notifyListeners();
       return true;
-    }).catchError((error){
+    }catch(Error){
       _isLoading = false;
       notifyListeners();
       return false;
-    });
+    }
+
   }
 
   Future<Null> fetchDataFromServer() {
     _isLoading = true;
     notifyListeners();
-   return my_api
-        .get(urlPointer+':5000/api/v1/vet/')
+    return my_api
+        .get(urlPointer + ':5000/api/v1/vet/')
         .then<Null>((my_api.Response response) {
       final Map<String, dynamic> receivedList = json.decode(response.body);
 
@@ -95,13 +94,11 @@ mixin LinkedAnimalsModel on Model {
       _isLoading = false;
       notifyListeners();
       _selectedAnimalID = null;
-
-    }).catchError((error ){
-
-     _isLoading = false;
-     notifyListeners();
-     return null;
-   });
+    }).catchError((error) {
+      _isLoading = false;
+      notifyListeners();
+      return null;
+    });
   }
 }
 
@@ -128,7 +125,7 @@ mixin AnimalsModel on LinkedAnimalsModel {
     final updatedStatus = !currentStatus;
 
     final Animal updatedAnimalStatus = Animal(
-      auto_id: selectedAnimal.auto_id,
+        auto_id: selectedAnimal.auto_id,
         title: selectedAnimal.title,
         desc: selectedAnimal.desc,
         price: selectedAnimal.price,
@@ -147,8 +144,8 @@ mixin AnimalsModel on LinkedAnimalsModel {
     return _selectedAnimalID;
   }
 
-  int get getMeTheIndex{
-    return _animals.indexWhere((Animal animal){
+  int get getMeTheIndex {
+    return _animals.indexWhere((Animal animal) {
       return animal.auto_id == _selectedAnimalID;
     });
   }
@@ -157,7 +154,7 @@ mixin AnimalsModel on LinkedAnimalsModel {
     if (_selectedAnimalID == null) {
       return null;
     }
-    return _animals.firstWhere((Animal animal){
+    return _animals.firstWhere((Animal animal) {
       return animal.auto_id == _selectedAnimalID;
     });
   }
@@ -174,7 +171,7 @@ mixin AnimalsModel on LinkedAnimalsModel {
       'price': price
     };
 
-    var url = urlPointer+':5000/api/v1/vet/${selectedAnimal.auto_id}';
+    var url = urlPointer + ':5000/api/v1/vet/${selectedAnimal.auto_id}';
 
     return my_api.put(url, body: json.encode(updatedInfo), headers: {
       'content-type': 'application/json'
@@ -195,7 +192,7 @@ mixin AnimalsModel on LinkedAnimalsModel {
 
       notifyListeners();
       return true;
-    }).catchError((error){
+    }).catchError((error) {
       _isLoading = false;
       notifyListeners();
       return false;
@@ -211,14 +208,13 @@ mixin AnimalsModel on LinkedAnimalsModel {
 
     notifyListeners();
     _isLoading = true;
-    var url = urlPointer+':5000/api/v1/vet/${deletedID}';
+    var url = urlPointer + ':5000/api/v1/vet/${deletedID}';
 
     return my_api.delete(url).then((my_api.Response response) {
       _isLoading = false;
       notifyListeners();
       return true;
-
-    }).catchError((error){
+    }).catchError((error) {
       _isLoading = false;
       notifyListeners();
       return false;

@@ -33,12 +33,17 @@ class _EditAnimalState extends State<EditAnimal> {
   Widget _buildSubmitButton() {
     return ScopedModelDescendant<MainModel>(
       builder: (BuildContext context, Widget child, MainModel model) {
-        return model.isLoading ? Center(child: CircularProgressIndicator()) : RaisedButton(
-          textColor: Colors.white,
-          child: Text('Save'),
-          onPressed: () => _submitAnimalData(
-              model.addAnAnimal, model.updateAnimal,model.selectAnimalID,model.getMeTheIndex),
-        );
+        return model.isLoading
+            ? Center(child: CircularProgressIndicator())
+            : RaisedButton(
+                textColor: Colors.white,
+                child: Text('Save'),
+                onPressed: () => _submitAnimalData(
+                    model.addAnAnimal,
+                    model.updateAnimal,
+                    model.selectAnimalID,
+                    model.getMeTheIndex),
+              );
       },
     );
   }
@@ -60,7 +65,7 @@ class _EditAnimalState extends State<EditAnimal> {
           child: ListView(
             padding: EdgeInsets.symmetric(horizontal: mPadding / 2),
             children: <Widget>[
-             _buildAnimalTitleTextField(animalSelected),
+              _buildAnimalTitleTextField(animalSelected),
               _buildAnimalDescriptionTextField(animalSelected),
               _buildPriceTextField(animalSelected),
               SizedBox(
@@ -135,8 +140,8 @@ class _EditAnimalState extends State<EditAnimal> {
     );
   }
 
-  void _submitAnimalData(Function addAnimal, Function updateAnimal
-  ,indicateNotInterestedAnymore,
+  void _submitAnimalData(
+      Function addAnimal, Function updateAnimal, indicateNotInterestedAnymore,
       [int selectedAnimalIndex]) {
     if (!_globalKey.currentState.validate()) {
       return;
@@ -149,8 +154,24 @@ class _EditAnimalState extends State<EditAnimal> {
         animalAddForm['desc'],
         animalAddForm['imageUrl'],
         animalAddForm['price'],
-      ).then((_){
-          Navigator.pushReplacementNamed(context, '/land/').then((_)=>indicateNotInterestedAnymore(null));
+      ).then((bool status) {
+        if (status) {
+          Navigator.pushReplacementNamed(context, '/land/')
+              .then((_) => indicateNotInterestedAnymore(null));
+        } else {
+          showDialog(context: context ,builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text(''),
+              content: Text('Check your connection and try again'),
+              actions: <Widget>[
+                FlatButton(child: Text('Dismiss'),onPressed: (){
+                  Navigator.of(context).pop();
+                },)
+
+              ],
+            );
+          });
+        }
       });
     } else {
       updateAnimal(
@@ -158,18 +179,19 @@ class _EditAnimalState extends State<EditAnimal> {
         animalAddForm['desc'],
         animalAddForm['imageUrl'],
         animalAddForm['price'],
-      ).then((_){
-        Navigator.pushReplacementNamed(context, '/land/').then((_)=>indicateNotInterestedAnymore(null));
+      ).then((_) {
+        Navigator.pushReplacementNamed(context, '/land/')
+            .then((_) => indicateNotInterestedAnymore(null));
       });
     }
-
   }
 
   @override
   Widget build(BuildContext context) {
     return ScopedModelDescendant<MainModel>(
         builder: (BuildContext context, Widget child, MainModel model) {
-     final Widget pageStructure = pageStructureContent(context, model.selectedAnimal);
+      final Widget pageStructure =
+          pageStructureContent(context, model.selectedAnimal);
       return model.getMeTheIndex == -1
           ? pageStructure
           : Scaffold(

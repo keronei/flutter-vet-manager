@@ -20,7 +20,7 @@ class _EditAnimalState extends State<EditAnimal> {
     'title': null,
     'desc': null,
     'price': null,
-    'imageUrl': 'http://10.0.2.2/images/ruth.png',
+    'imageUrl': 'http://localhost/images/ruth.png',
   };
 
   final GlobalKey<FormState> _globalKey = GlobalKey<FormState>();
@@ -161,7 +161,7 @@ class _EditAnimalState extends State<EditAnimal> {
         } else {
           showDialog(context: context ,builder: (BuildContext context) {
             return AlertDialog(
-              title: Text(''),
+              title: Text('Failed'),
               content: Text('Check your connection and try again'),
               actions: <Widget>[
                 FlatButton(child: Text('Dismiss'),onPressed: (){
@@ -170,7 +170,7 @@ class _EditAnimalState extends State<EditAnimal> {
 
               ],
             );
-          });
+          },);
         }
       });
     } else {

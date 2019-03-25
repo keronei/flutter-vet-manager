@@ -37,7 +37,7 @@ mixin LinkedAnimalsModel on Model {
           'content-type': 'application/json'
         }).then((my_api.Response response) {
 
-          if (response.statusCode != 200 || response.statusCode != 201){
+          if (response.statusCode != 201){
             _isLoading = false;
             notifyListeners();
             return false;
@@ -56,6 +56,10 @@ mixin LinkedAnimalsModel on Model {
       _isLoading = false;
       notifyListeners();
       return true;
+    }).catchError((error){
+      _isLoading = false;
+      notifyListeners();
+      return false;
     });
   }
 
@@ -64,7 +68,7 @@ mixin LinkedAnimalsModel on Model {
     notifyListeners();
    return my_api
         .get(urlPointer+':5000/api/v1/vet/')
-        .then((my_api.Response response) {
+        .then<Null>((my_api.Response response) {
       final Map<String, dynamic> receivedList = json.decode(response.body);
 
       if (receivedList == null) {
@@ -91,7 +95,13 @@ mixin LinkedAnimalsModel on Model {
       _isLoading = false;
       notifyListeners();
       _selectedAnimalID = null;
-    });
+
+    }).catchError((error ){
+
+     _isLoading = false;
+     notifyListeners();
+     return null;
+   });
   }
 }
 
@@ -152,7 +162,7 @@ mixin AnimalsModel on LinkedAnimalsModel {
     });
   }
 
-  Future<Null> updateAnimal(
+  Future<bool> updateAnimal(
       String title, String desc, String imageUrl, double price) {
     _isLoading = true;
     notifyListeners();
@@ -184,10 +194,15 @@ mixin AnimalsModel on LinkedAnimalsModel {
       _animals[getMeTheIndex] = updatedAnimal;
 
       notifyListeners();
+      return true;
+    }).catchError((error){
+      _isLoading = false;
+      notifyListeners();
+      return false;
     });
   }
 
-  void deleteAnimal() {
+  Future<bool> deleteAnimal() {
     var deletedID = selectedAnimal.auto_id;
 
     _animals.removeAt(getMeTheIndex);
@@ -198,11 +213,15 @@ mixin AnimalsModel on LinkedAnimalsModel {
     _isLoading = true;
     var url = urlPointer+':5000/api/v1/vet/${deletedID}';
 
-    my_api.delete(url).then((my_api.Response response) {
+    return my_api.delete(url).then((my_api.Response response) {
       _isLoading = false;
       notifyListeners();
+      return true;
 
-      print(json.encode(response.body));
+    }).catchError((error){
+      _isLoading = false;
+      notifyListeners();
+      return false;
     });
   }
 

@@ -14,24 +14,34 @@ mixin LinkedAnimalsModel on Model {
   String _selectedAnimalID;
   bool _isLoading = false;
 
-  Future<Null> addAnAnimal(
+  String urlPointer = "http://localhost"; //localhost for iOS or http://10.0.2.2 for android
+
+
+
+  Future<bool> addAnAnimal(
       String title, String desc, String imageUrl, double price) {
     _isLoading = true;
     notifyListeners();
     final Map<String, dynamic> animalData = {
       'title': title,
       'desc': desc,
-      'imageurl': 'http://10.0.2.2/images/ruth.png',
+      'imageurl': urlPointer+'/images/ruth.png',
       'price': price,
       'user_mail': _authenticatedUser.mEmail,
       'user_id': _authenticatedUser.mId
     };
 
-    return my_api.post('http://10.0.2.2:5000/api/v1/vet/',
+    return my_api.post(urlPointer+':5000/api/v1/vet/',
         body: json.encode(animalData),
         headers: {
           'content-type': 'application/json'
         }).then((my_api.Response response) {
+
+          if (response.statusCode != 200 || response.statusCode != 201){
+            _isLoading = false;
+            notifyListeners();
+            return false;
+          }
       final Map<String, dynamic> returnedResponse = json.decode(response.body);
 
       Animal newAnimal = Animal(
@@ -39,12 +49,13 @@ mixin LinkedAnimalsModel on Model {
           title: title,
           desc: desc,
           price: price,
-          imageUrl: 'http://10.0.2.2/images/ruth.png',
+          imageUrl: urlPointer+'/images/ruth.png',
           mIsCreatedByMail: _authenticatedUser.mEmail,
           mUserId: _authenticatedUser.mId);
       _animals.add(newAnimal);
       _isLoading = false;
       notifyListeners();
+      return true;
     });
   }
 
@@ -52,7 +63,7 @@ mixin LinkedAnimalsModel on Model {
     _isLoading = true;
     notifyListeners();
    return my_api
-        .get('http://10.0.2.2:5000/api/v1/vet/')
+        .get(urlPointer+':5000/api/v1/vet/')
         .then((my_api.Response response) {
       final Map<String, dynamic> receivedList = json.decode(response.body);
 
@@ -79,6 +90,7 @@ mixin LinkedAnimalsModel on Model {
       _animals = fromServer;
       _isLoading = false;
       notifyListeners();
+      _selectedAnimalID = null;
     });
   }
 }
@@ -152,7 +164,7 @@ mixin AnimalsModel on LinkedAnimalsModel {
       'price': price
     };
 
-    var url = 'http://10.0.2.2:5000/api/v1/vet/${selectedAnimal.auto_id}';
+    var url = urlPointer+':5000/api/v1/vet/${selectedAnimal.auto_id}';
 
     return my_api.put(url, body: json.encode(updatedInfo), headers: {
       'content-type': 'application/json'
@@ -184,7 +196,7 @@ mixin AnimalsModel on LinkedAnimalsModel {
 
     notifyListeners();
     _isLoading = true;
-    var url = 'http://10.0.2.2:5000/api/v1/vet/${deletedID}';
+    var url = urlPointer+':5000/api/v1/vet/${deletedID}';
 
     my_api.delete(url).then((my_api.Response response) {
       _isLoading = false;

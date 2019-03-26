@@ -1,16 +1,15 @@
 # mentor_follow
 
-A new Flutter project.
 
-## Getting Started
+## About this app
+Created during a flutter course taken in Udemy.com. Employs various dart inbuilt and 3rd party features to manipulate
+data, Here is a list of implemented features in summary.
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.io/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.io/docs/cookbook)
-
-For help getting started with Flutter, view our 
-[online documentation](https://flutter.io/docs), which offers tutorials, 
-samples, guidance on mobile development, and a full API reference.
+1. Auth & Firebase
+2. Scope modelling i.e, advanced state management
+3. Google Maps
+4. Token-based transactions
+5. Accessing System resources including Camera
+6. Http usage & Error handling
+7. Asynchronous requests - assync & await usage
+8. etc

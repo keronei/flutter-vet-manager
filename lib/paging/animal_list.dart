@@ -37,7 +37,7 @@ class _AnimalListState extends State<AnimalList> {
         Navigator.of(context)
             .push(MaterialPageRoute(builder: (BuildContext context) {
           return EditAnimal();
-        })).then((_) {
+        })).then((_){
           model.selectAnimalID(null);
         });
       },

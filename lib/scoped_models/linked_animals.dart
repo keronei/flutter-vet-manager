@@ -17,51 +17,6 @@ mixin LinkedAnimalsModel on Model {
   String urlPointer =
       "http://localhost"; //localhost for iOS or http://10.0.2.2 for android
 
-  Future<bool> addAnAnimal(
-      String title, String desc, String imageUrl, double price) async {
-    _isLoading = true;
-    notifyListeners();
-    final Map<String, dynamic> animalData = {
-      'title': title,
-      'desc': desc,
-      'imageurl': urlPointer + '/images/ruth.png',
-      'price': price,
-      'user_mail': _authenticatedUser.mEmail,
-      'user_id': _authenticatedUser.mId
-    };
-    try {
-      my_api.Response response = await my_api.post(
-          urlPointer + ':5000/api/v1/vet/',
-          body: json.encode(animalData),
-          headers: {'content-type': 'application/json'});
-
-      if (response.statusCode != 201) {
-        _isLoading = false;
-        notifyListeners();
-        return false;
-      }
-      final Map<String, dynamic> returnedResponse = json.decode(response.body);
-
-      Animal newAnimal = Animal(
-          auto_id: returnedResponse['id'].toString(),
-          title: title,
-          desc: desc,
-          price: price,
-          imageUrl: urlPointer + '/images/ruth.png',
-          mIsCreatedByMail: _authenticatedUser.mEmail,
-          mUserId: _authenticatedUser.mId);
-      _animals.add(newAnimal);
-      _isLoading = false;
-      notifyListeners();
-      return true;
-    }catch(Error){
-      _isLoading = false;
-      notifyListeners();
-      return false;
-    }
-
-  }
-
   Future<Null> fetchDataFromServer() {
     _isLoading = true;
     notifyListeners();
@@ -93,7 +48,8 @@ mixin LinkedAnimalsModel on Model {
       _animals = fromServer;
       _isLoading = false;
       notifyListeners();
-      _selectedAnimalID = null;
+      //_selectedAnimalID = null;
+
     }).catchError((error) {
       _isLoading = false;
       notifyListeners();
@@ -159,6 +115,50 @@ mixin AnimalsModel on LinkedAnimalsModel {
     });
   }
 
+  Future<bool> addAnAnimal(
+      String title, String desc, String imageUrl, double price) async {
+    _isLoading = true;
+    notifyListeners();
+    final Map<String, dynamic> animalData = {
+      'title': title,
+      'desc': desc,
+      'imageurl': urlPointer + '/images/ruth.png',
+      'price': price,
+      'user_mail': _authenticatedUser.mEmail,
+      'user_id': _authenticatedUser.mId
+    };
+    try {
+      my_api.Response response = await my_api.post(
+          urlPointer + ':5000/api/v1/vet/',
+          body: json.encode(animalData),
+          headers: {'content-type': 'application/json'});
+
+      if (response.statusCode != 201) {
+        _isLoading = false;
+        notifyListeners();
+        return false;
+      }
+      final Map<String, dynamic> returnedResponse = json.decode(response.body);
+
+      Animal newAnimal = Animal(
+          auto_id: returnedResponse['id'].toString(),
+          title: title,
+          desc: desc,
+          price: price,
+          imageUrl: urlPointer + '/images/ruth.png',
+          mIsCreatedByMail: _authenticatedUser.mEmail,
+          mUserId: _authenticatedUser.mId);
+      _animals.add(newAnimal);
+      _isLoading = false;
+      notifyListeners();
+      return true;
+    } catch (Error) {
+      _isLoading = false;
+      notifyListeners();
+      return false;
+    }
+  }
+
   Future<bool> updateAnimal(
       String title, String desc, String imageUrl, double price) {
     _isLoading = true;
@@ -177,6 +177,12 @@ mixin AnimalsModel on LinkedAnimalsModel {
       'content-type': 'application/json'
     }).then((my_api.Response response) {
       print(json.decode(response.body));
+
+      if (response.statusCode != 200) {
+        _isLoading = false;
+        notifyListeners();
+        return false;
+      }
 
       _isLoading = false;
       Animal updatedAnimal = Animal(
@@ -221,10 +227,10 @@ mixin AnimalsModel on LinkedAnimalsModel {
     });
   }
 
-  void selectAnimalID(String actual_id) {
-    _selectedAnimalID = actual_id;
+  void selectAnimalID(String actualId) {
+    _selectedAnimalID = actualId;
 
-    if (actual_id != null) {
+    if (actualId != null) {
       notifyListeners();
     }
   }

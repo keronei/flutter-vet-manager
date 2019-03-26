@@ -156,8 +156,8 @@ class _EditAnimalState extends State<EditAnimal> {
         animalAddForm['price'],
       ).then((bool status) {
         if (status) {
-          Navigator.pushReplacementNamed(context, '/land/')
-              .then((_) => indicateNotInterestedAnymore(null));
+          Navigator.pushReplacementNamed(context, '/land/');
+             // .then((_) => indicateNotInterestedAnymore(null));
         } else {
           showDialog(context: context ,builder: (BuildContext context) {
             return AlertDialog(
@@ -179,7 +179,7 @@ class _EditAnimalState extends State<EditAnimal> {
         animalAddForm['desc'],
         animalAddForm['imageUrl'],
         animalAddForm['price'],
-      ).then((_) {
+      ).then((status) {
         Navigator.pushReplacementNamed(context, '/land/')
             .then((_) => indicateNotInterestedAnymore(null));
       });

@@ -186,7 +186,7 @@ class _AuthState extends State<AuthPage> {
                     ),
                     ScopedModelDescendant<MainModel>(
                       builder: (BuildContext, Widget child, MainModel model) {
-                        return RaisedButton(
+                        return model.isLoading ? Center(child: CircularProgressIndicator()) : RaisedButton(
                           child: Text(_authMode == AuthMode.signIn
                               ? 'Sign In'
                               : 'Sign Up'),

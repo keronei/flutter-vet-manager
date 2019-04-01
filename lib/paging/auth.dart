@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
 import '../scoped_models/main.dart';
 
+enum AuthMode { signUp, signIn }
+
 class AuthPage extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
@@ -21,6 +23,10 @@ class _AuthState extends State<AuthPage> {
   };
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+  final TextEditingController processPassword = new TextEditingController();
+
+  AuthMode _authMode = AuthMode.signIn;
 
   DecorationImage _decorationImageBuilder() {
     return DecorationImage(
@@ -48,8 +54,25 @@ class _AuthState extends State<AuthPage> {
     );
   }
 
+  Widget _userConfirmPasswordTF() {
+    return TextFormField(
+      obscureText: true,
+      decoration: InputDecoration(
+          labelText: "Confirm Password", filled: true, fillColor: Colors.white),
+      validator: (String pass) {
+        if (pass.isEmpty || processPassword.text != pass) {
+          return 'Passwords should match';
+        }
+      },
+      onSaved: (String pass) {
+        _formAuthData['password'] = pass;
+      },
+    );
+  }
+
   Widget _userPasswordTF() {
     return TextFormField(
+      controller: processPassword,
       obscureText: true,
       decoration: InputDecoration(
           labelText: "Password", filled: true, fillColor: Colors.white),
@@ -112,13 +135,34 @@ class _AuthState extends State<AuthPage> {
                       height: 10.0,
                     ),
                     _userPasswordTF(),
+                    SizedBox(
+                      height: 10.0,
+                    ),
+
+                    _authMode == AuthMode.signUp ? _userConfirmPasswordTF() : Container(),
                     _buildSwitchTile(),
+                    SizedBox(
+                      height: 10.0,
+                    ),
+                    FlatButton(
+                        onPressed: () {
+                          setState(() {
+                            _authMode = _authMode == AuthMode.signIn
+                                ? AuthMode.signUp
+                                : AuthMode.signIn;
+                          });
+                        },
+                        child: Text(
+                            "Switch to ${_authMode == AuthMode.signIn ? 'Sign up' : 'Sign in'}")),
+                    SizedBox(
+                      height: 10.0,
+                    ),
                     ScopedModelDescendant<MainModel>(
                       builder: (BuildContext, Widget child, MainModel model) {
                         return RaisedButton(
-                          child: Text('login'),
+                          child: Text(_authMode == AuthMode.signIn ? 'Sign In' : 'Sign Up'),
                           textColor: Colors.white,
-                          onPressed:()=> _submitLogin(model.login),
+                          onPressed: () => _submitLogin(model.login),
                         );
                       },
                     )

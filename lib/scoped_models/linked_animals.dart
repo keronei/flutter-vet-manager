@@ -246,7 +246,7 @@ mixin UserModel on LinkedAnimalsModel {
         User(mId: 'jewds', mEmail: email, mUserPassword: password);
   }
 
-  Future<dynamic> signUp(String email, String password) async {
+  Future<Map<String, dynamic>> signUp(String email, String password) async {
     Map<String, dynamic> authData = {
       'user_name': 'op',
       'phone_number': '0745152310',
@@ -259,8 +259,10 @@ mixin UserModel on LinkedAnimalsModel {
         body: json.encode(authData),
         headers: {'content-type': 'application/json'});
 
+    List<dynamic> returnedResponse = json.decode(resultAuth.body);
+    //print(returnedResponse[0]['data']);
 
-    return resultAuth.statusCode;
+    return returnedResponse[0];
   }
 }
 

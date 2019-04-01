@@ -103,16 +103,20 @@ class _AuthState extends State<AuthPage> {
     if (!_formKey.currentState.validate() || !_formAuthData['tandc']) {
       return;
     }
+    Map<String, dynamic> returnedResponse;
 
     _formKey.currentState.save();
     if (_authMode == AuthMode.signIn) {
-      Login(_formAuthData['user_mail'], _formAuthData['password']);
+      returnedResponse =
+          await Login(_formAuthData['user_mail'], _formAuthData['password']);
     } else {
-      final Map<String, dynamic> requestResponse =
+      returnedResponse =
           await signUp(_formAuthData['user_mail'], _formAuthData['password']);
-
-      print(requestResponse['data']);
-      if (requestResponse['status'] == 201) {
+    }
+    if (returnedResponse['status'] == 202) {
+      Navigator.pushReplacementNamed(context, '/land');
+    } else {
+      if (returnedResponse['status'] == 201) {
         Navigator.pushReplacementNamed(context, '/land');
       } else {
         showDialog(
@@ -120,7 +124,7 @@ class _AuthState extends State<AuthPage> {
             builder: (BuildContext context) {
               return AlertDialog(
                 title: Text('Oops!'),
-                content:Text( requestResponse['data']),
+                content: Text(returnedResponse['data']),
                 actions: <Widget>[
                   FlatButton(
                     child: Text('close'),
@@ -186,14 +190,16 @@ class _AuthState extends State<AuthPage> {
                     ),
                     ScopedModelDescendant<MainModel>(
                       builder: (BuildContext, Widget child, MainModel model) {
-                        return model.isLoading ? Center(child: CircularProgressIndicator()) : RaisedButton(
-                          child: Text(_authMode == AuthMode.signIn
-                              ? 'Sign In'
-                              : 'Sign Up'),
-                          textColor: Colors.white,
-                          onPressed: () =>
-                              _submitLogin(model.login, model.signUp),
-                        );
+                        return model.isLoading
+                            ? Center(child: CircularProgressIndicator())
+                            : RaisedButton(
+                                child: Text(_authMode == AuthMode.signIn
+                                    ? 'Sign In'
+                                    : 'Sign Up'),
+                                textColor: Colors.white,
+                                onPressed: () =>
+                                    _submitLogin(model.login, model.signUp),
+                              );
                       },
                     )
                   ],

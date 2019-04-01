@@ -108,13 +108,31 @@ class _AuthState extends State<AuthPage> {
     if (_authMode == AuthMode.signIn) {
       Login(_formAuthData['user_mail'], _formAuthData['password']);
     } else {
-      final dynamic requestResponse = await signUp(_formAuthData['user_mail'], _formAuthData['password']);
-      if(requestResponse == 201){
+      final Map<String, dynamic> requestResponse =
+          await signUp(_formAuthData['user_mail'], _formAuthData['password']);
+
+      print(requestResponse['data']);
+      if (requestResponse['status'] == 201) {
         Navigator.pushReplacementNamed(context, '/land');
+      } else {
+        showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                title: Text('Oops!'),
+                content:Text( requestResponse['data']),
+                actions: <Widget>[
+                  FlatButton(
+                    child: Text('close'),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                  )
+                ],
+              );
+            });
       }
-
     }
-
   }
 
   @override

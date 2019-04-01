@@ -7,6 +7,7 @@ import '../models/user.dart';
 import '../models/animal.dart';
 import 'package:http/http.dart' as my_api;
 import 'dart:convert';
+import '../models/auth_mode.dart';
 
 mixin LinkedAnimalsModel on Model {
   List<Animal> _animals = [];
@@ -239,27 +240,8 @@ mixin AnimalsModel on LinkedAnimalsModel {
 }
 
 mixin UserModel on LinkedAnimalsModel {
-  Future<dynamic> login(String email, String password) async {
-    _isLoading = true;
-    notifyListeners();
-    Map<String, dynamic> authData = {
-      'email': email,
-      'password': password,
-    };
-
-    final my_api.Response resultAuth = await my_api.post(
-        urlPointer + ":5000/api/v1/auth/sign-in/",
-        body: json.encode(authData),
-        headers: {'content-type': 'application/json'});
-
-    List<dynamic> returnedResponseLogin = json.decode(resultAuth.body);
-
-    notifyListeners();
-
-    return returnedResponseLogin[0];
-  }
-
-  Future<Map<String, dynamic>> signUp(String email, String password) async {
+  Future<dynamic> authUser(String email, String password,
+      [AuthMode mode = AuthMode.logIn]) async {
     _isLoading = true;
     notifyListeners();
     Map<String, dynamic> authData = {
@@ -269,16 +251,24 @@ mixin UserModel on LinkedAnimalsModel {
       'password': password,
     };
 
-    final my_api.Response resultAuth = await my_api.post(
-        urlPointer + ":5000/api/v1/auth/sign-up/",
-        body: json.encode(authData),
-        headers: {'content-type': 'application/json'});
+    my_api.Response resultAuth;
 
-    List<dynamic> returnedResponse = json.decode(resultAuth.body);
+    if (mode == AuthMode.logIn) {
+      resultAuth = await my_api.post(urlPointer + ":5000/api/v1/auth/sign-in/",
+          body: json.encode(authData),
+          headers: {'content-type': 'application/json'});
+    } else {
+      resultAuth = await my_api.post(urlPointer + ":5000/api/v1/auth/sign-up/",
+          body: json.encode(authData),
+          headers: {'content-type': 'application/json'});
+    }
+
+    List<dynamic> returnedResponseLogin = json.decode(resultAuth.body);
     _isLoading = false;
+
     notifyListeners();
 
-    return returnedResponse[0];
+    return returnedResponseLogin[0];
   }
 }
 

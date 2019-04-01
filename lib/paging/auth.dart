@@ -5,8 +5,8 @@
 import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
 import '../scoped_models/main.dart';
+import '../models/auth_mode.dart';
 
-enum AuthMode { signUp, signIn }
 
 class AuthPage extends StatefulWidget {
   @override
@@ -26,7 +26,7 @@ class _AuthState extends State<AuthPage> {
 
   final TextEditingController processPassword = new TextEditingController();
 
-  AuthMode _authMode = AuthMode.signIn;
+  AuthMode _authMode = AuthMode.logIn;
 
   DecorationImage _decorationImageBuilder() {
     return DecorationImage(
@@ -99,19 +99,19 @@ class _AuthState extends State<AuthPage> {
     );
   }
 
-  void _submitLogin(Function Login, Function signUp) async {
+  void _submitLogin(Function authUser) async {
     if (!_formKey.currentState.validate() || !_formAuthData['tandc']) {
       return;
     }
     Map<String, dynamic> returnedResponse;
 
     _formKey.currentState.save();
-    if (_authMode == AuthMode.signIn) {
+    if (_authMode == AuthMode.logIn) {
       returnedResponse =
-          await Login(_formAuthData['user_mail'], _formAuthData['password']);
+          await authUser(_formAuthData['user_mail'], _formAuthData['password'],AuthMode.logIn );
     } else {
       returnedResponse =
-          await signUp(_formAuthData['user_mail'], _formAuthData['password']);
+          await authUser(_formAuthData['user_mail'], _formAuthData['password'], AuthMode.signUp);
     }
     if (returnedResponse['status'] == 202) {
       Navigator.pushReplacementNamed(context, '/land');
@@ -178,13 +178,13 @@ class _AuthState extends State<AuthPage> {
                     FlatButton(
                         onPressed: () {
                           setState(() {
-                            _authMode = _authMode == AuthMode.signIn
+                            _authMode = _authMode == AuthMode.logIn
                                 ? AuthMode.signUp
-                                : AuthMode.signIn;
+                                : AuthMode.logIn;
                           });
                         },
                         child: Text(
-                            "Switch to ${_authMode == AuthMode.signIn ? 'Sign up' : 'Sign in'}")),
+                            "Switch to ${_authMode == AuthMode.logIn ? 'Sign up' : 'Sign in'}")),
                     SizedBox(
                       height: 10.0,
                     ),
@@ -193,12 +193,12 @@ class _AuthState extends State<AuthPage> {
                         return model.isLoading
                             ? Center(child: CircularProgressIndicator())
                             : RaisedButton(
-                                child: Text(_authMode == AuthMode.signIn
+                                child: Text(_authMode == AuthMode.logIn
                                     ? 'Sign In'
                                     : 'Sign Up'),
                                 textColor: Colors.white,
                                 onPressed: () =>
-                                    _submitLogin(model.login, model.signUp),
+                                    _submitLogin(model.authUser),
                               );
                       },
                     )

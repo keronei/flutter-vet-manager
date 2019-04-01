@@ -49,7 +49,6 @@ mixin LinkedAnimalsModel on Model {
       _isLoading = false;
       notifyListeners();
       //_selectedAnimalID = null;
-
     }).catchError((error) {
       _isLoading = false;
       notifyListeners();
@@ -176,7 +175,7 @@ mixin AnimalsModel on LinkedAnimalsModel {
     return my_api.put(url, body: json.encode(updatedInfo), headers: {
       'content-type': 'application/json'
     }).then((my_api.Response response) {
-      print(json.decode(response.body));
+
 
       if (response.statusCode != 200) {
         _isLoading = false;
@@ -245,6 +244,23 @@ mixin UserModel on LinkedAnimalsModel {
   void login(String email, String password) {
     _authenticatedUser =
         User(mId: 'jewds', mEmail: email, mUserPassword: password);
+  }
+
+  Future<dynamic> signUp(String email, String password) async {
+    Map<String, dynamic> authData = {
+      'user_name': 'op',
+      'phone_number': '0745152310',
+      'email': email,
+      'password': password,
+    };
+
+    final my_api.Response resultAuth = await my_api.post(
+        urlPointer + ":5000/api/v1/auth/sign-up/",
+        body: json.encode(authData),
+        headers: {'content-type': 'application/json'});
+
+
+    return resultAuth.statusCode;
   }
 }
 

@@ -99,14 +99,22 @@ class _AuthState extends State<AuthPage> {
     );
   }
 
-  void _submitLogin(Function Login) {
+  void _submitLogin(Function Login, Function signUp) async {
     if (!_formKey.currentState.validate() || !_formAuthData['tandc']) {
       return;
     }
-    _formKey.currentState.save();
-    Login(_formAuthData['user_mail'], _formAuthData['password']);
 
-    Navigator.pushReplacementNamed(context, '/land');
+    _formKey.currentState.save();
+    if (_authMode == AuthMode.signIn) {
+      Login(_formAuthData['user_mail'], _formAuthData['password']);
+    } else {
+      final dynamic requestResponse = await signUp(_formAuthData['user_mail'], _formAuthData['password']);
+      if(requestResponse == 201){
+        Navigator.pushReplacementNamed(context, '/land');
+      }
+
+    }
+
   }
 
   @override
@@ -138,8 +146,9 @@ class _AuthState extends State<AuthPage> {
                     SizedBox(
                       height: 10.0,
                     ),
-
-                    _authMode == AuthMode.signUp ? _userConfirmPasswordTF() : Container(),
+                    _authMode == AuthMode.signUp
+                        ? _userConfirmPasswordTF()
+                        : Container(),
                     _buildSwitchTile(),
                     SizedBox(
                       height: 10.0,
@@ -160,9 +169,12 @@ class _AuthState extends State<AuthPage> {
                     ScopedModelDescendant<MainModel>(
                       builder: (BuildContext, Widget child, MainModel model) {
                         return RaisedButton(
-                          child: Text(_authMode == AuthMode.signIn ? 'Sign In' : 'Sign Up'),
+                          child: Text(_authMode == AuthMode.signIn
+                              ? 'Sign In'
+                              : 'Sign Up'),
                           textColor: Colors.white,
-                          onPressed: () => _submitLogin(model.login),
+                          onPressed: () =>
+                              _submitLogin(model.login, model.signUp),
                         );
                       },
                     )

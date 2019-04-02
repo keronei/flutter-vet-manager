@@ -22,11 +22,18 @@ class CoolApp extends StatefulWidget {
 }
 
 class _CoolAppState extends State<CoolApp> {
+  final MainModel _model = MainModel();
+
+  @override
+  void initState() {
+    _model.autoAuth();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
-    final MainModel model = MainModel();
     return ScopedModel<MainModel>(
-      model: model,
+      model: _model,
       child: MaterialApp(
         theme: ThemeData(
           brightness: Brightness.light,
@@ -36,9 +43,13 @@ class _CoolAppState extends State<CoolApp> {
         ),
         //home: AuthPage(),
         routes: {
-          '/': (BuildContext context) => AuthPage(),
-          '/land/': (BuildContext context) => AnimalsPage(model),
-          '/manager_admin/': (BuildContext context) => ManageAnimalsTop(model),
+          '/': (BuildContext context) => ScopedModelDescendant(
+                builder: (BuildContext contect, Widget child, MainModel model) {
+                  return model.user == null ? AuthPage() : AnimalsPage(_model);
+                },
+              ),
+          '/land/': (BuildContext context) => AnimalsPage(_model),
+          '/manager_admin/': (BuildContext context) => ManageAnimalsTop(_model),
         },
 
         onGenerateRoute: (RouteSettings settings) {
@@ -50,7 +61,7 @@ class _CoolAppState extends State<CoolApp> {
           if (params[1] == "animal") {
             final String animalID = params[2];
             //int position = int.parse(params[2]);
-            final Animal animal = model.allAnimals.firstWhere((Animal animal) {
+            final Animal animal = _model.allAnimals.firstWhere((Animal animal) {
               return animal.auto_id == animalID;
             });
             return MaterialPageRoute<String>(
@@ -60,7 +71,7 @@ class _CoolAppState extends State<CoolApp> {
         },
         onUnknownRoute: (RouteSettings params) {
           return MaterialPageRoute(
-            builder: (BuildContext context) => AnimalsPage(model),
+            builder: (BuildContext context) => AnimalsPage(_model),
           );
         },
       ),

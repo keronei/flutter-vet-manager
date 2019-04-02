@@ -114,6 +114,7 @@ class _AuthState extends State<AuthPage> {
           await authUser(_formAuthData['user_mail'], _formAuthData['password'], AuthMode.signUp);
     }
     if (returnedResponse['status'] == 202) {
+
       Navigator.pushReplacementNamed(context, '/land');
     } else {
       if (returnedResponse['status'] == 201) {

@@ -5,9 +5,9 @@
 import 'package:flutter/material.dart';
 
 class User {
-  final String mId;
+  final int mId;
   final String mEmail;
-  final String mUserPassword;
+  final String mUserToken;
 
-  User({@required this.mId, @required this.mEmail, @required this.mUserPassword});
+  User({@required this.mId, @required this.mEmail, @required this.mUserToken});
 }

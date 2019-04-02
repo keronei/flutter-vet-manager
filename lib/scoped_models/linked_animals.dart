@@ -21,9 +21,9 @@ mixin LinkedAnimalsModel on Model {
   Future<Null> fetchDataFromServer() {
     _isLoading = true;
     notifyListeners();
-    return my_api
-        .get(urlPointer + ':5000/api/v1/vet/')
-        .then<Null>((my_api.Response response) {
+    return my_api.get(urlPointer + ':5000/api/v1/vet/', headers: {
+      'Authorization': 'Bearer ${_authenticatedUser.mUserToken}'
+    }).then<Null>((my_api.Response response) {
       final Map<String, dynamic> receivedList = json.decode(response.body);
 
       if (receivedList == null) {
@@ -51,6 +51,7 @@ mixin LinkedAnimalsModel on Model {
       notifyListeners();
       //_selectedAnimalID = null;
     }).catchError((error) {
+      print("ERROR: " + error.toString());
       _isLoading = false;
       notifyListeners();
       return null;
@@ -131,7 +132,10 @@ mixin AnimalsModel on LinkedAnimalsModel {
       my_api.Response response = await my_api.post(
           urlPointer + ':5000/api/v1/vet/',
           body: json.encode(animalData),
-          headers: {'content-type': 'application/json'});
+          headers: {
+            'content-type': 'application/json',
+            'Authorization': 'Bearer ${_authenticatedUser.mUserToken}'
+          });
 
       if (response.statusCode != 201) {
         _isLoading = false;
@@ -147,7 +151,7 @@ mixin AnimalsModel on LinkedAnimalsModel {
           price: price,
           imageUrl: urlPointer + '/images/ruth.png',
           mIsCreatedByMail: _authenticatedUser.mEmail,
-          mUserId: _authenticatedUser.mId);
+          mUserId: _authenticatedUser.mId.toString());
       _animals.add(newAnimal);
       _isLoading = false;
       notifyListeners();
@@ -174,7 +178,8 @@ mixin AnimalsModel on LinkedAnimalsModel {
     var url = urlPointer + ':5000/api/v1/vet/${selectedAnimal.auto_id}';
 
     return my_api.put(url, body: json.encode(updatedInfo), headers: {
-      'content-type': 'application/json'
+      'content-type': 'application/json',
+      'Authorization': 'Bearer ${_authenticatedUser.mUserToken}'
     }).then((my_api.Response response) {
       if (response.statusCode != 200) {
         _isLoading = false;
@@ -190,7 +195,7 @@ mixin AnimalsModel on LinkedAnimalsModel {
           price: price,
           imageUrl: imageUrl,
           mIsCreatedByMail: _authenticatedUser.mEmail,
-          mUserId: _authenticatedUser.mId);
+          mUserId: _authenticatedUser.mId.toString());
 
       _animals[getMeTheIndex] = updatedAnimal;
 
@@ -214,7 +219,9 @@ mixin AnimalsModel on LinkedAnimalsModel {
     _isLoading = true;
     var url = urlPointer + ':5000/api/v1/vet/${deletedID}';
 
-    return my_api.delete(url).then((my_api.Response response) {
+    return my_api.delete(url, headers: {
+      'Authorization': 'Bearer ${_authenticatedUser.mUserToken}'
+    }).then((my_api.Response response) {
       _isLoading = false;
       notifyListeners();
       return true;
@@ -256,17 +263,26 @@ mixin UserModel on LinkedAnimalsModel {
     if (mode == AuthMode.logIn) {
       resultAuth = await my_api.post(urlPointer + ":5000/api/v1/auth/sign-in/",
           body: json.encode(authData),
-          headers: {'content-type': 'application/json'});
+          headers: {
+            'content-type': 'application/json',
+          });
     } else {
       resultAuth = await my_api.post(urlPointer + ":5000/api/v1/auth/sign-up/",
           body: json.encode(authData),
-          headers: {'content-type': 'application/json'});
+          headers: {
+            'content-type': 'application/json',
+          });
     }
 
     List<dynamic> returnedResponseLogin = json.decode(resultAuth.body);
     _isLoading = false;
 
     notifyListeners();
+
+    _authenticatedUser = User(
+        mId: returnedResponseLogin[0]['id'],
+        mEmail: email,
+        mUserToken: returnedResponseLogin[0]['token']);
 
     return returnedResponseLogin[0];
   }

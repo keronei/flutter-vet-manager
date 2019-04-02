@@ -5,6 +5,7 @@
 import 'package:scoped_model/scoped_model.dart';
 import '../models/user.dart';
 import '../models/animal.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as my_api;
 import 'dart:convert';
 import '../models/auth_mode.dart';
@@ -283,6 +284,9 @@ mixin UserModel on LinkedAnimalsModel {
         mId: returnedResponseLogin[0]['id'],
         mEmail: email,
         mUserToken: returnedResponseLogin[0]['token']);
+
+    SharedPreferences settings = await SharedPreferences.getInstance();
+    settings.setString("token", returnedResponseLogin[0]['token']);
 
     return returnedResponseLogin[0];
   }
